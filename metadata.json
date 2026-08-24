@@ -1,0 +1,6 @@
+{
+  "name": "Credita BSB - Crédito Consignado",
+  "description": "Plataforma oficial de crédito consignado para aposentados, pensionistas INSS, servidores públicos e trabalhadores CLT.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
