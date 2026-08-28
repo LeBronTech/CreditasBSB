@@ -10,44 +10,47 @@ export const FAQ: React.FC = () => {
     setOpenIndex(openIndex === index ? null : index);
   };
 
-  const filteredFaqs = FAQ_ITEMS.filter(item =>
-    item.question.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    item.answer.toLowerCase().includes(searchTerm.toLowerCase())
+  const filteredFaqs = FAQ_ITEMS.filter(
+    (item) =>
+      item.question.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      item.answer.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  const directWhatsAppUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent('Olá! Tenho uma dúvida sobre o empréstimo consignado na Credita BSB.')}`;
+  const directWhatsAppUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(
+    'Olá! Tenho uma dúvida sobre o empréstimo consignado na Credita BSB.'
+  )}`;
 
   return (
-    <section id="duvidas" className="py-16 lg:py-24 bg-white relative scroll-mt-20">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section id="duvidas" className="py-14 lg:py-20 relative scroll-mt-20 bg-slate-50 border-t border-slate-200">
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         
         {/* Header */}
-        <div className="text-center max-w-2xl mx-auto mb-10">
-          <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-red-100 text-[#D91E2A] text-xs font-bold uppercase tracking-wider mb-3">
-            <HelpCircle className="w-3.5 h-3.5" /> Dúvidas Frequentes
+        <div className="text-center max-w-2xl mx-auto mb-8">
+          <div className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-red-50 border border-red-200 text-[#D91E2A] text-xs font-bold uppercase tracking-wider mb-2">
+            <HelpCircle className="w-3.5 h-3.5 text-[#D91E2A]" /> Dúvidas Frequentes
           </div>
-          <h2 className="text-3xl sm:text-4xl font-extrabold text-gray-900 tracking-tight font-['Outfit']">
-            Perguntas e Respostas sobre o Consignado
+          <h2 className="text-2xl sm:text-4xl font-extrabold text-slate-900 tracking-tight font-['Outfit']">
+            Perguntas Frequentes
           </h2>
-          <p className="mt-3 text-base text-gray-600">
-            Tire suas dúvidas antes de contratar. Se precisar de ajuda, fale diretamente com nossa equipe.
+          <p className="mt-1 text-xs sm:text-sm text-slate-600">
+            Tire suas dúvidas antes de contratar com a Credita BSB.
           </p>
 
           {/* Quick Search in FAQ */}
-          <div className="mt-6 relative max-w-md mx-auto">
-            <Search className="w-4 h-4 text-gray-400 absolute left-4 top-1/2 -translate-y-1/2" />
+          <div className="mt-4 relative max-w-md mx-auto">
+            <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
             <input
               type="text"
-              placeholder="Digite sua dúvida (ex: negativado, taxas, prazo)..."
+              placeholder="Digite sua dúvida..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-11 pr-4 py-3 bg-[#F8F9FA] border border-gray-300 rounded-2xl text-sm focus:outline-hidden focus:border-[#D91E2A] focus:bg-white transition-all"
+              className="w-full pl-10 pr-3 py-2.5 bg-white border border-slate-300 rounded-xl text-xs text-slate-900 placeholder-slate-400 focus:outline-hidden focus:border-[#D91E2A] shadow-xs"
             />
           </div>
         </div>
 
-        {/* Accordion List */}
-        <div className="space-y-3">
+        {/* Accordion List with Solid Minimalist Styling */}
+        <div className="space-y-2.5">
           {filteredFaqs.length > 0 ? (
             filteredFaqs.map((faq, index) => {
               const isOpen = openIndex === index;
@@ -56,24 +59,22 @@ export const FAQ: React.FC = () => {
                   key={index}
                   className={`rounded-2xl border transition-all duration-200 overflow-hidden ${
                     isOpen
-                      ? 'bg-[#F8F9FA] border-gray-300 shadow-xs'
-                      : 'bg-white border-gray-200 hover:border-gray-300'
+                      ? 'bg-white border-[#D91E2A] shadow-md ring-1 ring-[#D91E2A]'
+                      : 'bg-white border-slate-200 hover:border-slate-300 shadow-xs'
                   }`}
                 >
                   <button
-                    type="button"
                     onClick={() => toggleAccordion(index)}
-                    className="w-full text-left p-5 sm:p-6 flex items-center justify-between gap-4 font-bold text-gray-900 text-base sm:text-lg cursor-pointer font-['Outfit']"
-                    id={`faq-toggle-${index}`}
+                    className="w-full p-4 text-left flex items-center justify-between gap-4 font-bold text-xs sm:text-sm text-slate-900 focus:outline-hidden cursor-pointer"
                   >
-                    <span>{faq.question}</span>
-                    <div className="p-1 rounded-full bg-gray-100 text-gray-600 flex-shrink-0">
-                      {isOpen ? <ChevronUp className="w-5 h-5" /> : <ChevronDown className="w-5 h-5" />}
-                    </div>
+                    <span className="font-['Outfit']">{faq.question}</span>
+                    <span className="p-1 rounded-lg bg-slate-100 text-slate-700 flex-shrink-0 border border-slate-200">
+                      {isOpen ? <ChevronUp className="w-3.5 h-3.5 text-[#D91E2A]" /> : <ChevronDown className="w-3.5 h-3.5" />}
+                    </span>
                   </button>
 
                   {isOpen && (
-                    <div className="px-5 sm:px-6 pb-6 pt-1 text-sm text-gray-600 leading-relaxed border-t border-gray-200/60 animate-in fade-in duration-150">
+                    <div className="px-4 pb-4 text-xs text-slate-600 leading-relaxed border-t border-slate-100 pt-3">
                       {faq.answer}
                     </div>
                   )}
@@ -81,29 +82,31 @@ export const FAQ: React.FC = () => {
               );
             })
           ) : (
-            <div className="text-center py-8 text-gray-500 text-sm">
-              Nenhuma pergunta encontrada com esse termo. Fale conosco no WhatsApp para tirar qualquer dúvida!
+            <div className="text-center py-6 text-xs text-slate-400">
+              Nenhuma pergunta encontrada para sua busca.
             </div>
           )}
         </div>
 
-        {/* Bottom Support Callout */}
-        <div className="mt-10 p-6 bg-red-50 border border-red-100 rounded-3xl text-center space-y-3">
-          <h4 className="font-bold text-gray-900 text-base">Ainda tem alguma dúvida específica sobre o seu benefício?</h4>
-          <p className="text-xs text-gray-600 max-w-lg mx-auto">
-            Nossos consultores autorizados em Brasília atendem de forma humanizada e rápida pelo WhatsApp.
-          </p>
+        {/* Still have questions banner */}
+        <div className="mt-8 bg-white border border-slate-200 rounded-2xl p-4 flex flex-col sm:flex-row items-center justify-between gap-3 text-center sm:text-left shadow-md">
           <div>
-            <a
-              href={directWhatsAppUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 px-6 py-3 bg-[#25D366] hover:bg-[#20bd5a] text-white font-bold text-sm rounded-xl shadow-xs transition-all hover:scale-105 active:scale-95"
-            >
-              <MessageCircle className="w-4 h-4 fill-white" />
-              <span>Tirar Dúvidas com Especialista</span>
-            </a>
+            <h4 className="text-xs sm:text-sm font-bold text-slate-900">
+              Ainda ficou com alguma dúvida?
+            </h4>
+            <p className="text-[11px] text-slate-500">
+              Fale direto com a equipe Credita BSB no WhatsApp.
+            </p>
           </div>
+          <a
+            href={directWhatsAppUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-1.5 px-4 py-2 bg-[#25D366] hover:bg-[#20bd5a] text-white font-bold text-xs rounded-xl shadow-md transition-all whitespace-nowrap"
+          >
+            <MessageCircle className="w-3.5 h-3.5 fill-white" />
+            <span>Falar no WhatsApp</span>
+          </a>
         </div>
 
       </div>

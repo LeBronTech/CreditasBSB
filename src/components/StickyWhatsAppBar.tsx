@@ -1,56 +1,69 @@
 import React, { useState, useEffect } from 'react';
-import { MessageCircle, ArrowUpRight, Sparkles, X } from 'lucide-react';
 import { WHATSAPP_NUMBER } from '../data';
+import { MessageCircle, X } from 'lucide-react';
 
 export const StickyWhatsAppBar: React.FC = () => {
-  const [showPrompt, setShowPrompt] = useState<boolean>(true);
+  const [isVisible, setIsVisible] = useState(false);
+  const [isDismissed, setIsDismissed] = useState(false);
 
-  const directWhatsAppUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent('Olá! Gostaria de consultar a melhor taxa de crédito consignado para o meu caso.')}`;
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 300) {
+        setIsVisible(true);
+      } else {
+        setIsVisible(false);
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  if (isDismissed || !isVisible) return null;
+
+  const directWhatsAppUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(
+    'Olá Credita BSB! Gostaria de consultar uma proposta de crédito consignado.'
+  )}`;
 
   return (
     <>
-      {/* Floating Action Button (Always in Bottom Right) */}
-      <div className="fixed bottom-5 right-5 z-50 flex flex-col items-end gap-2">
-        
-        {/* Floating Bubble Prompt */}
-        {showPrompt && (
-          <div className="bg-white text-gray-900 border border-gray-200/90 rounded-2xl p-3 shadow-xl max-w-[240px] text-xs relative animate-in fade-in slide-in-from-bottom-2 duration-300">
-            <button
-              onClick={() => setShowPrompt(false)}
-              className="absolute -top-1.5 -right-1.5 bg-gray-100 hover:bg-gray-200 text-gray-500 rounded-full p-0.5"
-            >
-              <X className="w-3 h-3" />
-            </button>
-            <div className="flex items-center gap-1.5 font-bold text-gray-900 mb-0.5">
-              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-              Consultor Credita BSB
-            </div>
-            <p className="text-gray-600 text-[11px] leading-snug">
-              Precisa de ajuda com a sua margem? Fale conosco direto no WhatsApp!
-            </p>
-          </div>
-        )}
-
-        {/* WhatsApp Round Button with Pulse Animation */}
+      {/* Floating Action Button (FAB) Bottom Right with pulse */}
+      <div className="fixed bottom-5 right-5 z-50 flex items-center gap-2">
         <a
           href={directWhatsAppUrl}
           target="_blank"
           rel="noopener noreferrer"
-          className="relative group flex items-center justify-center w-14 h-14 sm:w-16 sm:h-16 bg-[#25D366] hover:bg-[#20bd5a] text-white rounded-full shadow-2xl transition-all duration-300 hover:scale-110 active:scale-95"
-          id="floating-whatsapp-btn"
-          title="Falar no WhatsApp com a Credita BSB"
+          className="flex items-center gap-2 px-4 py-3 bg-[#25D366] hover:bg-[#20bd5a] text-white rounded-full shadow-2xl shadow-green-900/50 hover:scale-105 active:scale-95 transition-all group backdrop-blur-md border border-white/20"
+          id="fab-whatsapp"
         >
-          {/* Subtle green pulse ring */}
-          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#25D366] opacity-30"></span>
-
-          <MessageCircle className="w-7 h-7 sm:w-8 sm:h-8 fill-white relative z-10" />
-
-          {/* Desktop Hover Label */}
-          <span className="absolute right-full mr-3 top-1/2 -translate-y-1/2 bg-gray-900 text-white text-xs font-bold py-1.5 px-3 rounded-xl whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none shadow-lg">
+          <div className="relative">
+            <MessageCircle className="w-5 h-5 fill-white" />
+            <span className="absolute -top-1 -right-1 w-2 h-2 bg-white rounded-full animate-ping" />
+          </div>
+          <span className="text-xs font-black tracking-wide hidden sm:inline font-['Outfit']">
             Simular no WhatsApp
           </span>
         </a>
+      </div>
 
+      {/* Slim Mobile Bottom Bar */}
+      <div className="fixed bottom-0 left-0 right-0 z-40 sm:hidden bg-[#0D0E12] border-t border-[#222634] p-2.5 flex items-center justify-between gap-3 shadow-2xl">
+        <div className="flex items-center gap-2 min-w-0">
+          <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse flex-shrink-0" />
+          <p className="text-[11px] font-bold text-gray-200 truncate">
+            Taxa 1,39% • Pix no mesmo dia
+          </p>
+        </div>
+
+        <a
+          href={directWhatsAppUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex-shrink-0 px-3.5 py-1.5 bg-[#25D366] text-white rounded-xl text-xs font-extrabold flex items-center gap-1.5 shadow-md"
+        >
+          <MessageCircle className="w-3.5 h-3.5 fill-white" />
+          <span>Simular</span>
+        </a>
       </div>
     </>
   );

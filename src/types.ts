@@ -1,4 +1,4 @@
-export type LoanCategory = 'inss' | 'cartao' | 'portabilidade' | 'fgts' | 'siape' | 'clt';
+export type LoanCategory = 'inss' | 'siape' | 'cartao';
 
 export interface LoanCategoryConfig {
   id: LoanCategory;

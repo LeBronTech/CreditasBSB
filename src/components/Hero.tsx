@@ -1,7 +1,9 @@
-import React from 'react';
-import { ShieldCheck, ArrowRight, CheckCircle2, MessageCircle, Star, Sparkles, CreditCard, RefreshCw, Landmark, Zap } from 'lucide-react';
-import { WHATSAPP_NUMBER, COMPANY_YEARS, COMPANY_ADDRESS } from '../data';
+import React, { useState, useEffect } from 'react';
+import { Logo } from './Logo';
+import { WHATSAPP_NUMBER, COMPANY_YEARS, LOAN_CATEGORIES } from '../data';
 import { LoanCategory } from '../types';
+import { ArrowRight, MessageCircle, Sparkles, ShieldCheck, CheckCircle2, ChevronDown } from 'lucide-react';
+import { motion } from 'motion/react';
 
 interface HeroProps {
   selectedCategory: LoanCategory;
@@ -9,237 +11,207 @@ interface HeroProps {
   onScrollToSimulator: () => void;
 }
 
-export const Hero: React.FC<HeroProps> = ({ selectedCategory, onSelectCategory, onScrollToSimulator }) => {
-  const directWhatsApp = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent('Olá Credita BSB! Gostaria de consultar crédito consignado / portabilidade com a melhor taxa.')}`;
+export const Hero: React.FC<HeroProps> = ({
+  selectedCategory,
+  onSelectCategory,
+  onScrollToSimulator,
+}) => {
+  const directWhatsApp = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(
+    'Olá Credita BSB! Gostaria de consultar uma proposta de crédito consignado / portabilidade.'
+  )}`;
+
+  // Typewriter effect for Slogan: "Seu agente financeiro" and "Seu agente de crédito"
+  const phrases = [
+    'seu agente financeiro.',
+    'seu agente de crédito.',
+    'as menores taxas de Brasília.',
+    'dinheiro rápido na sua conta.',
+  ];
+  const [textIndex, setTextIndex] = useState(0);
+  const [charIndex, setCharIndex] = useState(0);
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [displayText, setDisplayText] = useState('');
+
+  useEffect(() => {
+    const currentPhrase = phrases[textIndex];
+    let timer: NodeJS.Timeout;
+
+    if (!isDeleting && charIndex <= currentPhrase.length) {
+      // Typing
+      setDisplayText(currentPhrase.substring(0, charIndex));
+      timer = setTimeout(() => {
+        setCharIndex((prev) => prev + 1);
+      }, 75);
+    } else if (!isDeleting && charIndex > currentPhrase.length) {
+      // Pause at full text
+      timer = setTimeout(() => {
+        setIsDeleting(true);
+      }, 2200);
+    } else if (isDeleting && charIndex > 0) {
+      // Deleting
+      setDisplayText(currentPhrase.substring(0, charIndex - 1));
+      timer = setTimeout(() => {
+        setCharIndex((prev) => prev - 1);
+      }, 35);
+    } else if (isDeleting && charIndex === 0) {
+      // Switch phrase
+      setIsDeleting(false);
+      setTextIndex((prev) => (prev + 1) % phrases.length);
+    }
+
+    return () => clearTimeout(timer);
+  }, [charIndex, isDeleting, textIndex]);
+
+  const quickServices: { id: LoanCategory; label: string; rate: string; tag: string }[] = [
+    { id: 'inss', label: 'Consignado INSS', rate: '1,39% a.m.', tag: 'Menor Taxa' },
+    { id: 'siape', label: 'Servidores SIAPE / GDF', rate: 'Taxa Balcão Especial', tag: 'Exclusivo Brasília' },
+    { id: 'cartao', label: 'Cartões Consignado e Benefício', rate: 'Saque Pix', tag: 'Sem anuidade' },
+  ];
 
   return (
-    <section className="relative overflow-hidden bg-gradient-to-b from-[#18181B] via-[#202025] to-[#18181B] text-white pt-8 pb-16 lg:pt-14 lg:pb-22">
-      {/* Background Ambient Glow */}
-      <div className="absolute top-0 right-1/4 w-96 h-96 bg-[#D91E2A]/15 rounded-full blur-3xl pointer-events-none" />
-      <div className="absolute bottom-0 left-10 w-80 h-80 bg-[#D91E2A]/10 rounded-full blur-3xl pointer-events-none" />
+    <section className="relative min-h-[85vh] flex flex-col justify-center items-center py-10 sm:py-16 px-4 overflow-hidden bg-white border-b border-slate-200">
+      
+      {/* Dynamic Soft Ambient Glow */}
+      <div className="absolute inset-0 pointer-events-none overflow-hidden">
+        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[340px] sm:w-[600px] h-[340px] sm:h-[600px] bg-[#D91E2A]/5 rounded-full blur-[120px]" />
+      </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
+      {/* Main Solid Minimalist Central Card */}
+      <div className="relative z-10 w-full max-w-3xl mx-auto">
+        
+        <div className="relative rounded-3xl p-6 sm:p-10 md:p-12 overflow-hidden bg-slate-50 border border-slate-200 shadow-md text-center text-slate-900">
           
-          {/* Left Column: Direct & Objective Value Proposition */}
-          <div className="lg:col-span-7 space-y-5">
-            
-            {/* Top pill badge */}
-            <div className="inline-flex items-center gap-2 bg-white/10 border border-white/15 px-3.5 py-1.5 rounded-full backdrop-blur-md">
-              <span className="flex h-2 w-2 relative">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#D91E2A] opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-[#D91E2A]"></span>
-              </span>
-              <span className="text-xs font-bold text-gray-200 tracking-wide uppercase">
-                {COMPANY_YEARS} • Conic Brasília
-              </span>
+          {/* Subtle slow motion watermark logos in corners (Visibly rotating and sleek) */}
+          <div
+            aria-hidden="true"
+            className="absolute -top-12 -left-12 sm:-top-16 sm:-left-16 w-36 h-36 sm:w-52 sm:h-52 pointer-events-none opacity-15 sm:opacity-25 filter blur-[0.5px] select-none"
+          >
+            <div className="w-full h-full animate-[spin_40s_linear_infinite]">
+              <svg viewBox="0 0 100 100" fill="none" className="w-full h-full">
+                <path d="M 0 29.3 L 29.3 0 L 47 0 L 47 28.5 L 28.5 47 L 0 47 Z" fill="#9CA3AF" />
+                <path d="M 0 53 L 28.5 53 L 47 71.5 L 47 100 L 29.3 100 L 0 70.7 Z" fill="#4B5563" />
+                <path d="M 53 0 L 70.7 0 L 100 29.3 L 100 47 L 86.5 47 L 86.5 35 L 65 13.5 L 53 13.5 Z" fill="#D91E2A" />
+                <path d="M 53 22 L 61 22 L 78 39 L 78 47 L 66 47 L 66 44 L 53 31 Z" fill="#FF4D5A" />
+                <path d="M 100 53 L 100 70.7 L 70.7 100 L 53 100 L 53 86.5 L 65 86.5 L 86.5 65 L 86.5 53 Z" fill="#D91E2A" />
+                <path d="M 78 53 L 78 61 L 61 78 L 53 78 L 53 66 L 66 66 L 66 53 Z" fill="#B91C1C" />
+              </svg>
             </div>
-
-            {/* Main Headline */}
-            <h1 className="text-3xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight leading-[1.12] font-['Outfit']">
-              Crédito com a menor taxa e <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FF4D5A] via-[#D91E2A] to-[#FF6B6B]">dinheiro rápido</span> na sua conta.
-            </h1>
-
-            {/* Direct & Objective Subtitle */}
-            <p className="text-base sm:text-lg text-gray-300 max-w-2xl font-normal leading-relaxed">
-              Especialistas em <strong className="text-white">Consignado INSS & SIAPE</strong>, <strong className="text-white">Cartões Consignado/Benefício</strong> e <strong className="text-white">Portabilidade com Troco</strong>. Sem burocracia e aprovado para negativados.
-            </p>
-
-            {/* 4 Objective Quick Benefits */}
-            <div className="grid grid-cols-2 sm:grid-cols-2 gap-2.5 pt-1 text-xs sm:text-sm text-gray-200">
-              <div className="flex items-center gap-2 bg-white/5 p-2 rounded-xl border border-white/5">
-                <CheckCircle2 className="w-4 h-4 text-[#D91E2A] flex-shrink-0" />
-                <span>Taxas a partir de <strong>1,39% a.m.</strong></span>
-              </div>
-              <div className="flex items-center gap-2 bg-white/5 p-2 rounded-xl border border-white/5">
-                <CheckCircle2 className="w-4 h-4 text-[#D91E2A] flex-shrink-0" />
-                <span><strong>Zero depósito</strong> prévio (100% seguro)</span>
-              </div>
-              <div className="flex items-center gap-2 bg-white/5 p-2 rounded-xl border border-white/5">
-                <CheckCircle2 className="w-4 h-4 text-[#D91E2A] flex-shrink-0" />
-                <span>Liberação rápida via <strong>PIX</strong></span>
-              </div>
-              <div className="flex items-center gap-2 bg-white/5 p-2 rounded-xl border border-white/5">
-                <CheckCircle2 className="w-4 h-4 text-[#D91E2A] flex-shrink-0" />
-                <span>Atendimento no <strong>Conic ou WhatsApp</strong></span>
-              </div>
-            </div>
-
-            {/* Action Buttons */}
-            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3.5 pt-3">
-              <button
-                onClick={onScrollToSimulator}
-                className="inline-flex items-center justify-center gap-2.5 px-7 py-3.5 bg-[#D91E2A] hover:bg-[#B91C1C] text-white font-bold text-sm sm:text-base rounded-xl shadow-lg shadow-red-900/30 transition-all hover:scale-[1.02] active:scale-[0.98] cursor-pointer"
-                id="hero-cta-simulate"
-              >
-                <span>Simular Empréstimo</span>
-                <ArrowRight className="w-4 h-4" />
-              </button>
-
-              <a
-                href={directWhatsApp}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center justify-center gap-2.5 px-6 py-3.5 bg-[#25D366] hover:bg-[#20bd5a] text-white font-bold text-sm sm:text-base rounded-xl shadow-lg shadow-green-900/20 transition-all hover:scale-[1.02] active:scale-[0.98]"
-                id="hero-cta-whatsapp"
-              >
-                <MessageCircle className="w-5 h-5 fill-white" />
-                <span>Chamar no WhatsApp</span>
-              </a>
-            </div>
-
-            {/* Trust Badges */}
-            <div className="pt-4 border-t border-white/10 flex flex-wrap items-center gap-4 text-xs text-gray-400">
-              <div className="flex items-center gap-1.5">
-                <div className="flex text-amber-400">
-                  {[...Array(5)].map((_, i) => (
-                    <Star key={i} className="w-3 h-3 fill-amber-400" />
-                  ))}
-                </div>
-                <span className="font-bold text-white">4.9/5</span>
-                <span>no Google</span>
-              </div>
-
-              <div className="flex items-center gap-1.5">
-                <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
-                <span>Correspondente Autorizado Banco Central</span>
-              </div>
-            </div>
-
           </div>
 
-          {/* Right Column: 4 Main Core Services (Direct from Bio) */}
-          <div className="lg:col-span-5 space-y-3">
+          <div
+            aria-hidden="true"
+            className="absolute -bottom-12 -right-12 sm:-bottom-16 sm:-right-16 w-36 h-36 sm:w-52 sm:h-52 pointer-events-none opacity-15 sm:opacity-25 filter blur-[0.5px] select-none"
+          >
+            <div className="w-full h-full animate-[spin_45s_linear_infinite_reverse]">
+              <svg viewBox="0 0 100 100" fill="none" className="w-full h-full">
+                <path d="M 0 29.3 L 29.3 0 L 47 0 L 47 28.5 L 28.5 47 L 0 47 Z" fill="#9CA3AF" />
+                <path d="M 0 53 L 28.5 53 L 47 71.5 L 47 100 L 29.3 100 L 0 70.7 Z" fill="#4B5563" />
+                <path d="M 53 0 L 70.7 0 L 100 29.3 L 100 47 L 86.5 47 L 86.5 35 L 65 13.5 L 53 13.5 Z" fill="#D91E2A" />
+                <path d="M 53 22 L 61 22 L 78 39 L 78 47 L 66 47 L 66 44 L 53 31 Z" fill="#FF4D5A" />
+                <path d="M 100 53 L 100 70.7 L 70.7 100 L 53 100 L 53 86.5 L 65 86.5 L 86.5 65 L 86.5 53 Z" fill="#D91E2A" />
+                <path d="M 78 53 L 78 61 L 61 78 L 53 78 L 53 66 L 66 66 L 66 53 Z" fill="#B91C1C" />
+              </svg>
+            </div>
+          </div>
+
+          {/* Top Micro Badge */}
+          <div className="relative z-10 inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-red-50 border border-red-200 text-[11px] font-bold text-[#D91E2A] uppercase tracking-wider mb-6 shadow-2xs">
+            <span className="w-2 h-2 rounded-full bg-[#D91E2A] animate-pulse" />
+            <span>{COMPANY_YEARS} • Conic Brasília</span>
+          </div>
+
+          {/* Centered Large Emblem & Brand Typography in Light Variant */}
+          <div className="relative z-10 flex flex-col items-center justify-center mb-6">
+            <Logo variant="light" layout="vertical" size="xl" />
+          </div>
+
+          {/* Typewriter Slogan Effect */}
+          <div className="relative z-10 min-h-[36px] sm:min-h-[44px] flex items-center justify-center mb-5">
+            <div className="text-xl sm:text-2xl md:text-3xl font-extrabold font-['Outfit'] tracking-tight text-slate-900">
+              <span>A sua escolha inteligente para </span>
+              <span className="text-[#D91E2A] font-black underline decoration-[#D91E2A]/40 underline-offset-4">
+                {displayText}
+              </span>
+              <span className="inline-block w-0.5 h-6 sm:h-7 bg-[#D91E2A] ml-1 animate-pulse align-middle" />
+            </div>
+          </div>
+
+          {/* Compact Objective Description */}
+          <p className="relative z-10 text-xs sm:text-sm text-slate-600 max-w-lg mx-auto mb-7 font-medium leading-relaxed">
+            Consignado INSS e Servidores SIAPE & GDF com a menor taxa do mercado, cartões benefício e aprovação rápida sem burocracia.
+          </p>
+
+          {/* Compact Direct Actions */}
+          <div className="relative z-10 flex flex-col sm:flex-row items-center justify-center gap-3 mb-8 max-w-md mx-auto">
+            <button
+              onClick={onScrollToSimulator}
+              className="w-full sm:w-auto flex-1 inline-flex items-center justify-center gap-2 px-6 py-3.5 bg-[#D91E2A] hover:bg-[#B91C1C] text-white font-extrabold text-xs sm:text-sm rounded-2xl shadow-md transition-all hover:scale-[1.02] active:scale-[0.98] cursor-pointer"
+              id="hero-cta-simulate"
+            >
+              <span>Simular Agora</span>
+              <ArrowRight className="w-4 h-4" />
+            </button>
+
+            <a
+              href={directWhatsApp}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-full sm:w-auto flex-1 inline-flex items-center justify-center gap-2 px-6 py-3.5 bg-[#25D366] hover:bg-[#20bd5a] text-white font-extrabold text-xs sm:text-sm rounded-2xl shadow-md transition-all hover:scale-[1.02] active:scale-[0.98]"
+              id="hero-cta-whatsapp"
+            >
+              <MessageCircle className="w-4 h-4 fill-white" />
+              <span>Chamar no WhatsApp</span>
+            </a>
+          </div>
+
+          {/* 4 Minimalist Service Pills (Mobile Friendly & Direct) */}
+          <div className="relative z-10 pt-6 border-t border-slate-200">
+            <div className="text-[10px] sm:text-xs font-bold uppercase tracking-widest text-slate-500 mb-3 flex items-center justify-center gap-1.5">
+              <Sparkles className="w-3.5 h-3.5 text-[#D91E2A]" /> Nossas Soluções:
+            </div>
             
-            <div className="text-xs font-bold uppercase tracking-wider text-gray-400 flex items-center gap-1.5">
-              <Sparkles className="w-3.5 h-3.5 text-[#D91E2A]" /> Nossos Principais Serviços:
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+              {quickServices.map((svc) => (
+                <button
+                  key={svc.id}
+                  onClick={() => {
+                    onSelectCategory(svc.id);
+                    onScrollToSimulator();
+                  }}
+                  className={`p-2.5 rounded-xl text-left border transition-all cursor-pointer ${
+                    selectedCategory === svc.id
+                      ? 'bg-red-50 border-[#D91E2A] ring-1 ring-[#D91E2A] text-slate-900 shadow-xs'
+                      : 'bg-white hover:bg-slate-100 border-slate-200 text-slate-900'
+                  }`}
+                  id={`hero-svc-${svc.id}`}
+                >
+                  <div className="flex items-center justify-between gap-1 mb-1">
+                    <span className="text-[9px] font-black uppercase text-[#D91E2A]">{svc.tag}</span>
+                    <span className="text-[9px] font-semibold text-slate-500">{svc.rate}</span>
+                  </div>
+                  <div className="text-[11px] sm:text-xs font-bold text-slate-900 truncate">
+                    {svc.label}
+                  </div>
+                </button>
+              ))}
             </div>
-
-            {/* 4 Cards Grid */}
-            <div className="grid grid-cols-2 gap-3">
-              
-              {/* Consignado INSS & SIAPE */}
-              <div
-                onClick={() => {
-                  onSelectCategory('inss');
-                  onScrollToSimulator();
-                }}
-                className={`p-4 rounded-2xl cursor-pointer transition-all border text-left ${
-                  selectedCategory === 'inss'
-                    ? 'bg-[#D91E2A]/20 border-[#D91E2A] ring-1 ring-[#D91E2A]'
-                    : 'bg-white/5 hover:bg-white/10 border-white/10'
-                }`}
-                id="hero-card-inss"
-              >
-                <div className="flex justify-between items-start mb-2">
-                  <div className="p-2 rounded-lg bg-[#D91E2A]/20 text-[#FF4D5A]">
-                    <Landmark className="w-4 h-4" />
-                  </div>
-                  <span className="text-[10px] font-extrabold uppercase px-1.5 py-0.5 rounded-md bg-[#D91E2A] text-white">
-                    1,39% a.m.
-                  </span>
-                </div>
-                <h3 className="font-bold text-xs sm:text-sm text-white leading-tight">Consignado INSS & SIAPE</h3>
-                <p className="text-[11px] text-gray-400 mt-1 leading-tight">Aposentados, Pensionistas e Servidores</p>
-              </div>
-
-              {/* Cartões Consignado e Benefício */}
-              <div
-                onClick={() => {
-                  onSelectCategory('cartao');
-                  onScrollToSimulator();
-                }}
-                className={`p-4 rounded-2xl cursor-pointer transition-all border text-left ${
-                  selectedCategory === 'cartao'
-                    ? 'bg-[#D91E2A]/20 border-[#D91E2A] ring-1 ring-[#D91E2A]'
-                    : 'bg-white/5 hover:bg-white/10 border-white/10'
-                }`}
-                id="hero-card-cartao"
-              >
-                <div className="flex justify-between items-start mb-2">
-                  <div className="p-2 rounded-lg bg-[#D91E2A]/20 text-[#FF4D5A]">
-                    <CreditCard className="w-4 h-4" />
-                  </div>
-                  <span className="text-[10px] font-extrabold uppercase px-1.5 py-0.5 rounded-md bg-white/20 text-gray-200">
-                    Sem anuidade
-                  </span>
-                </div>
-                <h3 className="font-bold text-xs sm:text-sm text-white leading-tight">Cartões e Benefício</h3>
-                <p className="text-[11px] text-gray-400 mt-1 leading-tight">Margem extra e saque em dinheiro</p>
-              </div>
-
-              {/* Portabilidades */}
-              <div
-                onClick={() => {
-                  onSelectCategory('portabilidade');
-                  onScrollToSimulator();
-                }}
-                className={`p-4 rounded-2xl cursor-pointer transition-all border text-left ${
-                  selectedCategory === 'portabilidade'
-                    ? 'bg-[#D91E2A]/20 border-[#D91E2A] ring-1 ring-[#D91E2A]'
-                    : 'bg-white/5 hover:bg-white/10 border-white/10'
-                }`}
-                id="hero-card-portabilidade"
-              >
-                <div className="flex justify-between items-start mb-2">
-                  <div className="p-2 rounded-lg bg-emerald-500/20 text-emerald-400">
-                    <RefreshCw className="w-4 h-4" />
-                  </div>
-                  <span className="text-[10px] font-extrabold uppercase px-1.5 py-0.5 rounded-md bg-emerald-600 text-white">
-                    Troco na conta
-                  </span>
-                </div>
-                <h3 className="font-bold text-xs sm:text-sm text-white leading-tight">Portabilidade c/ Troco</h3>
-                <p className="text-[11px] text-gray-400 mt-1 leading-tight">Reduza parcelas de outros bancos</p>
-              </div>
-
-              {/* Saque-Aniversário FGTS */}
-              <div
-                onClick={() => {
-                  onSelectCategory('fgts');
-                  onScrollToSimulator();
-                }}
-                className={`p-4 rounded-2xl cursor-pointer transition-all border text-left ${
-                  selectedCategory === 'fgts'
-                    ? 'bg-[#D91E2A]/20 border-[#D91E2A] ring-1 ring-[#D91E2A]'
-                    : 'bg-white/5 hover:bg-white/10 border-white/10'
-                }`}
-                id="hero-card-fgts"
-              >
-                <div className="flex justify-between items-start mb-2">
-                  <div className="p-2 rounded-lg bg-emerald-500/20 text-emerald-400">
-                    <Zap className="w-4 h-4" />
-                  </div>
-                  <span className="text-[10px] font-extrabold uppercase px-1.5 py-0.5 rounded-md bg-emerald-600 text-white">
-                    Sem boleto
-                  </span>
-                </div>
-                <h3 className="font-bold text-xs sm:text-sm text-white leading-tight">Antecipação FGTS</h3>
-                <p className="text-[11px] text-gray-400 mt-1 leading-tight">Até 10 anos de Saque-Aniversário</p>
-              </div>
-
-            </div>
-
-            {/* Quick Conic Office Address Highlight */}
-            <div className="p-3.5 rounded-2xl bg-white/5 border border-white/10 text-xs text-gray-300 flex items-center justify-between gap-2">
-              <div className="truncate">
-                <span className="font-bold text-white block">📍 Atendimento Presencial:</span>
-                <span className="text-[11px] text-gray-400 truncate block">Ed. Eldorado, Sala 613, Conic - Brasília</span>
-              </div>
-              <a
-                href={directWhatsApp}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="px-3 py-1.5 bg-[#25D366] text-white font-bold rounded-lg text-[11px] whitespace-nowrap"
-              >
-                Agendar
-              </a>
-            </div>
-
           </div>
 
         </div>
+
+        {/* Floating Scroll Indicator */}
+        <div className="mt-5 flex items-center justify-center">
+          <button
+            onClick={onScrollToSimulator}
+            className="inline-flex items-center gap-1.5 text-xs text-slate-500 hover:text-slate-900 transition-colors cursor-pointer font-medium"
+          >
+            <span>Role para simular</span>
+            <ChevronDown className="w-3.5 h-3.5 animate-bounce text-[#D91E2A]" />
+          </button>
+        </div>
+
       </div>
+
     </section>
   );
 };

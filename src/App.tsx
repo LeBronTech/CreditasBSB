@@ -4,13 +4,14 @@ import { Hero } from './components/Hero';
 import { AntiFraudBanner } from './components/AntiFraudBanner';
 import { Simulator } from './components/Simulator';
 import { RateComparisonChart } from './components/RateComparisonChart';
-import { Modalities } from './components/Modalities';
 import { HowItWorks } from './components/HowItWorks';
 import { Testimonials } from './components/Testimonials';
 import { QuickLeadForm } from './components/QuickLeadForm';
 import { FAQ } from './components/FAQ';
 import { Footer } from './components/Footer';
 import { StickyWhatsAppBar } from './components/StickyWhatsAppBar';
+import { FloatingScrollLogoPieces } from './components/FloatingScrollLogoPieces';
+import { ScrollReveal } from './components/ScrollReveal';
 import { LoanCategory } from './types';
 
 export default function App() {
@@ -24,48 +25,69 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-[#F8F9FA] text-[#1E2024] flex flex-col font-['Plus_Jakarta_Sans'] antialiased selection:bg-[#D91E2A] selection:text-white">
+    <div className="relative min-h-screen text-[#1E2024] flex flex-col font-['Plus_Jakarta_Sans'] antialiased selection:bg-[#D91E2A] selection:text-white overflow-x-hidden">
+      
+      {/* =========================================================================
+          CLEAN SOLID MINIMALIST BACKGROUND
+         ========================================================================= */}
+      <div
+        aria-hidden="true"
+        className="fixed inset-0 pointer-events-none -z-10 bg-[#F8FAFC]"
+      />
+
+      {/* Floating 3 Pieces of Credita BSB Logo responding to scroll */}
+      <FloatingScrollLogoPieces />
+
       {/* Navigation Header */}
       <Header onOpenSimulator={scrollToSimulator} />
 
       {/* Main Content Sections */}
-      <main className="flex-1">
-        {/* Hero Section with Live CTA & Audience Switcher */}
+      <main className="flex-1 relative z-10">
+        
+        {/* 1. Hero Section */}
         <Hero
           selectedCategory={selectedCategory}
           onSelectCategory={setSelectedCategory}
           onScrollToSimulator={scrollToSimulator}
         />
 
-        {/* Security & Anti-Fraud Disclaimer */}
-        <AntiFraudBanner />
+        {/* 2. Security & Anti-Fraud Disclaimer */}
+        <ScrollReveal variant="fade-up" delay={0.1}>
+          <AntiFraudBanner />
+        </ScrollReveal>
 
-        {/* Interactive Loan Simulator */}
-        <Simulator
-          selectedCategory={selectedCategory}
-          onSelectCategory={setSelectedCategory}
-        />
+        {/* 3. Interactive Loan Simulator (Digitável & Direct) */}
+        <ScrollReveal variant="glass-pop" delay={0.1}>
+          <Simulator
+            selectedCategory={selectedCategory}
+            onSelectCategory={setSelectedCategory}
+          />
+        </ScrollReveal>
 
-        {/* Rate & Cost Comparison Chart */}
-        <RateComparisonChart />
+        {/* 4. Rate & Cost Comparison Chart */}
+        <ScrollReveal variant="scale-blur" delay={0.1}>
+          <RateComparisonChart />
+        </ScrollReveal>
 
-        {/* Modalities Detail Section */}
-        <Modalities
-          onSelectCategory={setSelectedCategory}
-          onScrollToSimulator={scrollToSimulator}
-        />
+        {/* 5. 3-Step Simple Process */}
+        <ScrollReveal variant="slide-left" delay={0.1}>
+          <HowItWorks />
+        </ScrollReveal>
 
-        {/* 3-Step Simple Process */}
-        <HowItWorks />
+        {/* 6. Testimonials */}
+        <ScrollReveal variant="slide-right" delay={0.1}>
+          <Testimonials />
+        </ScrollReveal>
 
-        {/* Testimonials with Category Filtering */}
-        <Testimonials />
+        {/* 7. High Conversion Lead Form */}
+        <ScrollReveal variant="scale-blur" delay={0.1}>
+          <QuickLeadForm />
+        </ScrollReveal>
 
-        {/* High Conversion Lead Form */}
-        <QuickLeadForm />
-
-        {/* FAQ with Search */}
-        <FAQ />
+        {/* 8. FAQ with Search */}
+        <ScrollReveal variant="fade-up" delay={0.1}>
+          <FAQ />
+        </ScrollReveal>
       </main>
 
       {/* Regulatory Footer */}

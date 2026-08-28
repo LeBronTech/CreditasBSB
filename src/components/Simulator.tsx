@@ -3,25 +3,24 @@ import { LOAN_CATEGORIES } from '../data';
 import { LoanCategory } from '../types';
 import {
   calculateMonthlyInstallment,
-  calculateTotalInterest,
   calculateSavingsComparedToBank,
   formatCurrency,
   generateWhatsAppLink,
   maskPhone,
-  maskCPF
+  maskCPF,
 } from '../utils/calculator';
 import {
   Calculator,
   MessageCircle,
   Sparkles,
   ShieldCheck,
-  Zap,
   CheckCircle2,
   Lock,
   ArrowRight,
   Landmark,
   CreditCard,
-  RefreshCw
+  Building2,
+  DollarSign,
 } from 'lucide-react';
 
 interface SimulatorProps {
@@ -34,6 +33,7 @@ export const Simulator: React.FC<SimulatorProps> = ({ selectedCategory, onSelect
   const config = LOAN_CATEGORIES[currentCategoryKey];
 
   const [amount, setAmount] = useState<number>(config.defaultAmount);
+  const [typedAmount, setTypedAmount] = useState<string>(config.defaultAmount.toLocaleString('pt-BR'));
   const [months, setMonths] = useState<number>(config.defaultMonths);
   const [customerName, setCustomerName] = useState<string>('');
   const [customerPhone, setCustomerPhone] = useState<string>('');
@@ -45,20 +45,47 @@ export const Simulator: React.FC<SimulatorProps> = ({ selectedCategory, onSelect
     onSelectCategory(cat);
     const newConfig = LOAN_CATEGORIES[cat] || LOAN_CATEGORIES['inss'];
     setAmount(newConfig.defaultAmount);
+    setTypedAmount(newConfig.defaultAmount.toLocaleString('pt-BR'));
     setMonths(newConfig.defaultMonths);
   };
 
+  // Handle raw typing in the digitável field
+  const handleTypedAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const rawVal = e.target.value.replace(/\D/g, '');
+    if (!rawVal) {
+      setTypedAmount('');
+      setAmount(0);
+      return;
+    }
+    const num = parseInt(rawVal, 10);
+    setTypedAmount(num.toLocaleString('pt-BR'));
+    setAmount(num);
+  };
+
+  const handleAmountChipClick = (val: number) => {
+    setAmount(val);
+    setTypedAmount(val.toLocaleString('pt-BR'));
+  };
+
+  const handleSliderChange = (val: number) => {
+    setAmount(val);
+    setTypedAmount(val.toLocaleString('pt-BR'));
+  };
+
+  // Effective amount for calculation (ensure at least minAmount or fallback)
+  const effectiveAmount = amount > 0 ? amount : config.minAmount;
+
   // Calculations
-  const installment = calculateMonthlyInstallment(amount, months, config.monthlyRate);
-  const totalSavings = calculateSavingsComparedToBank(amount, months, config.monthlyRate);
+  const installment = calculateMonthlyInstallment(effectiveAmount, months, config.monthlyRate);
+  const totalSavings = calculateSavingsComparedToBank(effectiveAmount, months, config.monthlyRate);
 
   const whatsappUrl = generateWhatsAppLink({
     name: customerName,
     categoryName: config.name,
-    amount,
+    amount: effectiveAmount,
     months,
     installmentValue: installment,
-    additionalNotes: customerCPF ? `CPF: ${customerCPF}` : undefined
+    additionalNotes: customerCPF ? `CPF: ${customerCPF}` : undefined,
   });
 
   const handleLeadSubmit = (e: React.FormEvent) => {
@@ -67,25 +94,25 @@ export const Simulator: React.FC<SimulatorProps> = ({ selectedCategory, onSelect
   };
 
   return (
-    <section id="simulador" className="py-14 lg:py-20 bg-white relative scroll-mt-20">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section id="simulador" className="py-14 lg:py-20 relative scroll-mt-20 bg-white border-y border-slate-200 shadow-xs">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         
-        {/* Section Header - Objective & Direct */}
-        <div className="text-center max-w-2xl mx-auto mb-10">
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-red-50 text-[#D91E2A] text-xs font-bold uppercase tracking-wider mb-2">
+        {/* Section Header - Objective & Direct in Clean Light Block */}
+        <div className="text-center max-w-2xl mx-auto mb-8">
+          <div className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-red-50 border border-red-200 text-[#D91E2A] text-xs font-bold uppercase tracking-wider mb-2">
             <Calculator className="w-3.5 h-3.5" /> Simulador de Crédito
           </div>
-          <h2 className="text-3xl sm:text-4xl font-extrabold text-gray-900 tracking-tight font-['Outfit']">
+          <h2 className="text-2xl sm:text-4xl font-extrabold text-slate-900 tracking-tight font-['Outfit']">
             Simule seu crédito em <span className="text-[#D91E2A]">segundos</span>
           </h2>
-          <p className="mt-2 text-sm sm:text-base text-gray-600">
-            Escolha o valor e o prazo para ver a estimativa da parcela. Sem compromisso e sem taxas antecipadas.
+          <p className="mt-1 text-xs sm:text-sm text-slate-600">
+            Digite o valor desejado e escolha o prazo. Sem consulta ao SPC/Serasa e sem taxas prévias.
           </p>
         </div>
 
-        {/* Category Tabs */}
-        <div className="flex justify-center mb-8">
-          <div className="inline-flex p-1 bg-gray-100 rounded-2xl max-w-full overflow-x-auto gap-1">
+        {/* Category Tabs Minimalist (INSS, SIAPE, Cartões) */}
+        <div className="flex justify-center mb-6">
+          <div className="inline-flex p-1.5 bg-slate-100 border border-slate-200 rounded-2xl max-w-full overflow-x-auto gap-1 shadow-sm">
             {(Object.keys(LOAN_CATEGORIES) as LoanCategory[]).map((catKey) => {
               const item = LOAN_CATEGORIES[catKey];
               const isSelected = selectedCategory === catKey;
@@ -95,16 +122,15 @@ export const Simulator: React.FC<SimulatorProps> = ({ selectedCategory, onSelect
                   onClick={() => handleCategoryChange(catKey)}
                   className={`px-3.5 sm:px-5 py-2.5 rounded-xl font-bold text-xs sm:text-sm whitespace-nowrap transition-all duration-200 cursor-pointer ${
                     isSelected
-                      ? 'bg-[#D91E2A] text-white shadow-sm'
-                      : 'text-gray-600 hover:text-gray-900 hover:bg-white/60'
+                      ? 'bg-[#D91E2A] text-white shadow-md'
+                      : 'text-slate-600 hover:text-slate-900 hover:bg-slate-200/70'
                   }`}
                   id={`tab-category-${catKey}`}
                 >
-                  <div className="flex items-center gap-1.5">
-                    {catKey === 'inss' && <Landmark className="w-3.5 h-3.5" />}
-                    {catKey === 'cartao' && <CreditCard className="w-3.5 h-3.5" />}
-                    {catKey === 'portabilidade' && <RefreshCw className="w-3.5 h-3.5" />}
-                    {catKey === 'fgts' && <Zap className="w-3.5 h-3.5" />}
+                  <div className="flex items-center gap-2">
+                    {catKey === 'inss' && <Landmark className="w-4 h-4" />}
+                    {catKey === 'siape' && <Building2 className="w-4 h-4" />}
+                    {catKey === 'cartao' && <CreditCard className="w-4 h-4" />}
                     <span>{item.name}</span>
                   </div>
                 </button>
@@ -114,103 +140,120 @@ export const Simulator: React.FC<SimulatorProps> = ({ selectedCategory, onSelect
         </div>
 
         {/* Interactive Simulator Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
           
-          {/* Left / Main Controls Card */}
-          <div className="lg:col-span-7 bg-[#F8F9FA] border border-gray-200/80 rounded-3xl p-6 sm:p-8 space-y-6 shadow-xs">
+          {/* Left / Main Controls Card (Clean Light Slate) */}
+          <div className="lg:col-span-7 bg-slate-50 border border-slate-200 rounded-3xl p-5 sm:p-7 space-y-6 shadow-sm text-slate-900">
             
             {/* Category summary header */}
-            <div className="flex items-center justify-between gap-3 pb-5 border-b border-gray-200">
+            <div className="flex items-center justify-between gap-3 pb-4 border-b border-slate-200">
               <div>
-                <span className="text-xs font-bold uppercase tracking-wider text-[#D91E2A]">{config.tagline}</span>
-                <h3 className="text-lg sm:text-xl font-extrabold text-gray-900">{config.name}</h3>
+                <span className="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-[#D91E2A]">{config.tagline}</span>
+                <h3 className="text-base sm:text-lg font-extrabold text-slate-900 font-['Outfit']">{config.name}</h3>
               </div>
               <div className="text-right">
-                <span className="text-[11px] text-gray-500 block">Taxa</span>
-                <span className="text-base sm:text-lg font-black text-emerald-600">{config.monthlyRate.toString().replace('.', ',')}% a.m.</span>
+                <span className="text-[10px] text-slate-500 block uppercase font-bold">Taxa Especial</span>
+                <span className="text-sm sm:text-base font-black text-emerald-600">{config.monthlyRate.toString().replace('.', ',')}% a.m.</span>
               </div>
             </div>
 
-            {/* Input 1: Loan Amount Slider & Input */}
+            {/* Input 1: Digitável Loan Amount */}
             <div className="space-y-3">
               <div className="flex items-center justify-between">
-                <label htmlFor="loan-amount-input" className="text-xs font-bold text-gray-800 uppercase tracking-wider">
-                  Valor Desejado:
+                <label htmlFor="loan-amount-digitavel" className="text-xs font-bold text-slate-800 uppercase tracking-wider flex items-center gap-1.5">
+                  <DollarSign className="w-4 h-4 text-[#D91E2A]" />
+                  <span>Valor do Empréstimo (digite o valor):</span>
                 </label>
-                <div className="flex items-center gap-1 bg-white border border-gray-300 px-3 py-1 rounded-xl shadow-xs">
-                  <span className="text-xs font-bold text-gray-400">R$</span>
-                  <input
-                    id="loan-amount-input"
-                    type="number"
-                    value={amount}
-                    min={config.minAmount}
-                    max={config.maxAmount}
-                    step={500}
-                    onChange={(e) => setAmount(Math.max(config.minAmount, Math.min(config.maxAmount, Number(e.target.value) || config.minAmount)))}
-                    className="w-24 sm:w-28 text-right font-black text-gray-900 focus:outline-hidden text-sm sm:text-base"
-                  />
-                </div>
+                <span className="text-[11px] font-semibold text-slate-500">
+                  Mín: {formatCurrency(config.minAmount)}
+                </span>
               </div>
 
-              {/* Slider */}
-              <input
-                type="range"
-                min={config.minAmount}
-                max={config.maxAmount}
-                step={500}
-                value={amount}
-                onChange={(e) => setAmount(Number(e.target.value))}
-                className="w-full h-2.5 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-[#D91E2A]"
-                id="loan-amount-slider"
-              />
+              {/* Large Typed Input Field */}
+              <div className="relative flex items-center rounded-2xl bg-white border-2 border-slate-300 focus-within:border-[#D91E2A] focus-within:ring-3 focus-within:ring-[#D91E2A]/20 transition-all shadow-xs p-2 sm:p-3">
+                <div className="pl-2 pr-3 text-base sm:text-xl font-extrabold text-slate-500 select-none">
+                  R$
+                </div>
+                <input
+                  id="loan-amount-digitavel"
+                  type="text"
+                  inputMode="numeric"
+                  value={typedAmount}
+                  onChange={handleTypedAmountChange}
+                  placeholder="0,00"
+                  className="w-full text-xl sm:text-2xl font-black text-slate-900 focus:outline-hidden bg-transparent tracking-tight font-['Outfit']"
+                />
+                <button
+                  type="button"
+                  onClick={() => handleAmountChipClick(config.defaultAmount)}
+                  className="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-[11px] font-bold rounded-xl border border-slate-200 transition-colors cursor-pointer whitespace-nowrap ml-2"
+                >
+                  Padrão
+                </button>
+              </div>
 
-              <div className="flex justify-between text-[11px] text-gray-500 font-medium">
-                <span>Mín: {formatCurrency(config.minAmount)}</span>
-                <span className="font-bold text-[#D91E2A] text-xs">{formatCurrency(amount)}</span>
-                <span>Máx: {formatCurrency(config.maxAmount)}</span>
+              {/* Slider Controller */}
+              <div className="space-y-1 pt-1">
+                <input
+                  type="range"
+                  min={config.minAmount}
+                  max={config.maxAmount}
+                  step={500}
+                  value={Math.max(config.minAmount, Math.min(config.maxAmount, amount))}
+                  onChange={(e) => handleSliderChange(Number(e.target.value))}
+                  className="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-[#D91E2A]"
+                  id="loan-amount-slider"
+                />
+                <div className="flex justify-between text-[10px] text-slate-500 font-medium">
+                  <span>{formatCurrency(config.minAmount)}</span>
+                  <span className="font-bold text-[#D91E2A]">Arraste ou digite acima</span>
+                  <span>{formatCurrency(config.maxAmount)}</span>
+                </div>
               </div>
 
               {/* Quick Amount Chips */}
               <div className="flex flex-wrap gap-1.5 pt-1">
-                {[3000, 5000, 10000, 20000, 50000].filter(val => val >= config.minAmount && val <= config.maxAmount).map((val) => (
-                  <button
-                    key={val}
-                    type="button"
-                    onClick={() => setAmount(val)}
-                    className={`px-3 py-1 text-xs font-bold rounded-lg border transition-all ${
-                      amount === val
-                        ? 'bg-gray-900 text-white border-gray-900'
-                        : 'bg-white text-gray-700 border-gray-200 hover:border-gray-300'
-                    }`}
-                  >
-                    {formatCurrency(val)}
-                  </button>
-                ))}
+                {[3000, 5000, 10000, 20000, 35000, 50000, 100000]
+                  .filter((val) => val >= config.minAmount && val <= config.maxAmount)
+                  .map((val) => (
+                    <button
+                      key={val}
+                      type="button"
+                      onClick={() => handleAmountChipClick(val)}
+                      className={`px-3 py-1.5 text-xs font-bold rounded-xl border transition-all cursor-pointer ${
+                        amount === val
+                          ? 'bg-[#D91E2A] text-white border-[#D91E2A] shadow-xs'
+                          : 'bg-white text-slate-700 border-slate-200 hover:border-slate-400'
+                      }`}
+                    >
+                      {formatCurrency(val)}
+                    </button>
+                  ))}
               </div>
             </div>
 
             {/* Input 2: Months / Installments */}
-            <div className="space-y-3 pt-2">
+            <div className="space-y-2.5 pt-2 border-t border-slate-200">
               <div className="flex items-center justify-between">
-                <label className="text-xs font-bold text-gray-800 uppercase tracking-wider">
+                <label className="text-xs font-bold text-slate-800 uppercase tracking-wider">
                   Prazo de Pagamento:
                 </label>
-                <span className="text-sm font-black text-gray-900 bg-white border border-gray-300 px-3 py-1 rounded-xl">
+                <span className="text-xs font-black text-slate-900 bg-white border border-slate-300 px-3 py-1 rounded-xl shadow-xs">
                   {months} {months === 1 ? 'mês' : 'meses'}
                 </span>
               </div>
 
               {/* Popular Months Chips */}
-              <div className="flex flex-wrap gap-2">
+              <div className="flex flex-wrap gap-1.5">
                 {config.popularMonths.map((m) => (
                   <button
                     key={m}
                     type="button"
                     onClick={() => setMonths(m)}
-                    className={`flex-1 min-w-[60px] py-2 px-2 text-xs font-bold rounded-xl border transition-all text-center ${
+                    className={`flex-1 min-w-[50px] py-2 px-2 text-xs font-bold rounded-xl border transition-all text-center cursor-pointer ${
                       months === m
                         ? 'bg-[#D91E2A] text-white border-[#D91E2A] shadow-xs'
-                        : 'bg-white text-gray-700 border-gray-200 hover:border-gray-400'
+                        : 'bg-white text-slate-700 border-slate-200 hover:border-slate-400'
                     }`}
                   >
                     {m}x
@@ -220,119 +263,135 @@ export const Simulator: React.FC<SimulatorProps> = ({ selectedCategory, onSelect
             </div>
 
             {/* Requirements Box */}
-            <div className="p-3.5 bg-white rounded-2xl border border-gray-200 text-xs text-gray-600 space-y-1.5">
-              <span className="font-bold text-gray-900 block text-[11px] uppercase tracking-wider">Requisitos:</span>
-              {config.requirements.map((req, idx) => (
-                <div key={idx} className="flex items-center gap-1.5">
-                  <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500 flex-shrink-0" />
-                  <span>{req}</span>
-                </div>
-              ))}
+            <div className="p-3.5 bg-white rounded-2xl border border-slate-200 text-xs text-slate-700 space-y-1.5 shadow-xs">
+              <span className="font-bold text-slate-900 block text-[10px] uppercase tracking-wider">Vantagens & Requisitos:</span>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-1.5">
+                {config.requirements.map((req, idx) => (
+                  <div key={idx} className="flex items-center gap-1.5 text-[11px]">
+                    <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 flex-shrink-0" />
+                    <span className="truncate">{req}</span>
+                  </div>
+                ))}
+              </div>
             </div>
 
           </div>
 
-          {/* Right / Result & Direct CTA Card */}
-          <div className="lg:col-span-5 bg-[#18181B] text-white rounded-3xl p-6 sm:p-8 shadow-xl border border-gray-800 space-y-6">
+          {/* Right / Result & Direct CTA Card (Solid High-Contrast Obsidian) */}
+          <div className="lg:col-span-5 bg-[#12141C] text-white rounded-3xl p-5 sm:p-7 shadow-2xl border border-[#232736] space-y-5">
             
-            <div className="flex items-center justify-between border-b border-gray-800 pb-4">
+            <div className="flex items-center justify-between border-b border-[#232736] pb-3">
               <div>
-                <span className="text-xs font-bold text-emerald-400 uppercase tracking-wider flex items-center gap-1">
-                  <Sparkles className="w-3.5 h-3.5" /> Proposta Estimada
+                <span className="text-[10px] font-bold text-emerald-400 uppercase tracking-wider flex items-center gap-1">
+                  <Sparkles className="w-3 h-3" /> Proposta Estimada
                 </span>
-                <h4 className="text-base font-extrabold text-white">Resultado da Simulação</h4>
+                <h4 className="text-sm sm:text-base font-extrabold text-white font-['Outfit']">Resultado do Cálculo</h4>
               </div>
-              <span className="bg-white/10 text-gray-300 text-[10px] font-bold px-2 py-0.5 rounded-full">
+              <span className="bg-[#1C1F2B] text-gray-300 text-[10px] font-bold px-2.5 py-1 rounded-full border border-[#2D3346]">
                 100% Gratuito
               </span>
             </div>
 
             {/* Main Result Numbers */}
-            <div className="space-y-4">
-              <div className="bg-white/5 border border-white/10 rounded-2xl p-4 text-center">
-                <span className="text-xs text-gray-400 block mb-0.5 uppercase tracking-wider">
-                  Valor da Parcela Estimada
-                </span>
-                <div className="text-3xl sm:text-4xl font-black text-white tracking-tight font-['Outfit']">
-                  {formatCurrency(installment)}
-                  <span className="text-sm font-normal text-gray-400 ml-1">/mês</span>
-                </div>
-                <span className="text-[11px] text-emerald-400 font-semibold mt-1 block">
-                  {months} parcelas fixas descontadas em folha
-                </span>
+            <div className="bg-[#181B24] rounded-2xl p-4 sm:p-5 border border-[#282D3D] space-y-2.5">
+              <div className="text-[10px] text-gray-400 font-bold uppercase tracking-wider">
+                Parcela Estimada ({months}x):
               </div>
-
-              {/* Summary Stats */}
-              <div className="grid grid-cols-2 gap-2.5 text-xs">
-                <div className="bg-white/5 p-3 rounded-xl border border-white/5">
-                  <span className="text-gray-400 block text-[10px] uppercase">Valor Liberado:</span>
-                  <span className="font-bold text-white text-sm">{formatCurrency(amount)}</span>
-                </div>
-                <div className="bg-white/5 p-3 rounded-xl border border-white/5">
-                  <span className="text-gray-400 block text-[10px] uppercase">Economia estimada:</span>
-                  <span className="font-bold text-emerald-400 text-sm">{formatCurrency(totalSavings)}</span>
-                </div>
+              <div className="text-2xl sm:text-3xl font-black text-white font-['Outfit'] flex items-baseline gap-1">
+                <span className="text-[#FF4D5A]">{formatCurrency(installment)}</span>
+                <span className="text-xs font-medium text-gray-400">/mês</span>
+              </div>
+              
+              <div className="pt-2 border-t border-[#282D3D] flex items-center justify-between text-xs text-gray-300">
+                <span>Valor Solicitado:</span>
+                <strong className="text-white">{formatCurrency(effectiveAmount)}</strong>
+              </div>
+              <div className="flex items-center justify-between text-xs text-gray-300">
+                <span>Economia Estimada:</span>
+                <strong className="text-emerald-400">até {formatCurrency(totalSavings)}</strong>
               </div>
             </div>
 
-            {/* Direct WhatsApp Call or Fast Form */}
+            {/* Direct CTA or Optional Form Toggle */}
             {!showFastLeadForm ? (
-              <div className="space-y-3 pt-2">
+              <div className="space-y-2.5">
                 <a
                   href={whatsappUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-full flex items-center justify-center gap-2.5 py-4 bg-[#25D366] hover:bg-[#20bd5a] text-white font-bold rounded-2xl text-sm sm:text-base shadow-lg transition-all hover:scale-[1.02] active:scale-[0.98]"
+                  className="w-full py-3.5 px-4 bg-[#25D366] hover:bg-[#20bd5a] text-white font-extrabold text-xs sm:text-sm rounded-2xl shadow-lg transition-all hover:scale-[1.01] active:scale-[0.99] flex items-center justify-center gap-2"
                   id="simulator-cta-whatsapp"
                 >
-                  <MessageCircle className="w-5 h-5 fill-white" />
-                  <span>Contratar via WhatsApp</span>
+                  <MessageCircle className="w-4 h-4 fill-white" />
+                  <span>Contratar no WhatsApp</span>
                 </a>
 
                 <button
+                  type="button"
                   onClick={() => setShowFastLeadForm(true)}
-                  className="w-full py-2.5 text-xs text-gray-400 hover:text-white font-semibold underline text-center block cursor-pointer"
+                  className="w-full py-2.5 text-[11px] text-gray-300 hover:text-white font-semibold flex items-center justify-center gap-1.5 cursor-pointer"
                 >
-                  Ou preencher dados rápidos antes
+                  <span>Ou preencher dados rápidos antes</span>
+                  <ArrowRight className="w-3.5 h-3.5 text-[#FF4D5A]" />
                 </button>
               </div>
             ) : (
-              <form onSubmit={handleLeadSubmit} className="space-y-3 pt-1">
+              <form onSubmit={handleLeadSubmit} className="space-y-2.5 animate-in fade-in duration-200">
                 <div>
-                  <label className="text-[11px] text-gray-300 font-bold block mb-1">Seu Nome:</label>
+                  <label className="block text-[10px] font-bold uppercase tracking-wider text-gray-400 mb-1">
+                    Seu Nome:
+                  </label>
                   <input
                     type="text"
                     required
-                    placeholder="Ex: Maria da Silva"
                     value={customerName}
                     onChange={(e) => setCustomerName(e.target.value)}
-                    className="w-full bg-white/10 border border-white/20 rounded-xl px-3 py-2 text-xs text-white placeholder-gray-500 focus:outline-hidden focus:border-[#D91E2A]"
+                    placeholder="Ex: Ana Silva"
+                    className="w-full px-3 py-2 bg-[#181B24] border border-[#282D3D] rounded-xl text-xs text-white placeholder-gray-500 focus:outline-hidden focus:border-[#D91E2A]"
                   />
                 </div>
-                <div>
-                  <label className="text-[11px] text-gray-300 font-bold block mb-1">WhatsApp / Telefone:</label>
-                  <input
-                    type="tel"
-                    required
-                    placeholder="(61) 99999-9999"
-                    value={customerPhone}
-                    onChange={(e) => setCustomerPhone(maskPhone(e.target.value))}
-                    className="w-full bg-white/10 border border-white/20 rounded-xl px-3 py-2 text-xs text-white placeholder-gray-500 focus:outline-hidden focus:border-[#D91E2A]"
-                  />
+
+                <div className="grid grid-cols-2 gap-2">
+                  <div>
+                    <label className="block text-[10px] font-bold uppercase tracking-wider text-gray-400 mb-1">
+                      WhatsApp:
+                    </label>
+                    <input
+                      type="tel"
+                      required
+                      value={customerPhone}
+                      onChange={(e) => setCustomerPhone(maskPhone(e.target.value))}
+                      placeholder="(61) 99999-9999"
+                      className="w-full px-3 py-2 bg-[#181B24] border border-[#282D3D] rounded-xl text-xs text-white placeholder-gray-500 focus:outline-hidden focus:border-[#D91E2A]"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-[10px] font-bold uppercase tracking-wider text-gray-400 mb-1">
+                      CPF (Opcional):
+                    </label>
+                    <input
+                      type="text"
+                      value={customerCPF}
+                      onChange={(e) => setCustomerCPF(maskCPF(e.target.value))}
+                      placeholder="000.000.000-00"
+                      className="w-full px-3 py-2 bg-[#181B24] border border-[#282D3D] rounded-xl text-xs text-white placeholder-gray-500 focus:outline-hidden focus:border-[#D91E2A]"
+                    />
+                  </div>
                 </div>
+
                 <button
                   type="submit"
-                  className="w-full py-3.5 bg-[#25D366] hover:bg-[#20bd5a] text-white font-bold rounded-xl text-xs sm:text-sm flex items-center justify-center gap-2"
+                  className="w-full py-3 bg-[#D91E2A] hover:bg-[#B91C1C] text-white font-extrabold text-xs sm:text-sm rounded-xl shadow-md transition-all flex items-center justify-center gap-2 cursor-pointer mt-1"
                 >
                   <MessageCircle className="w-4 h-4 fill-white" />
-                  <span>Enviar e Conversar no WhatsApp</span>
+                  <span>Enviar para Atendente</span>
                 </button>
               </form>
             )}
 
-            <div className="flex items-center justify-center gap-2 text-[10px] text-gray-400 pt-1">
-              <Lock className="w-3 h-3 text-emerald-400" />
-              <span>Sem cobrança antecipada • Atendimento seguro</span>
+            <div className="pt-2 flex items-center justify-center gap-2 text-[10px] text-gray-400 text-center">
+              <Lock className="w-3 h-3 text-[#FF4D5A]" />
+              <span>Sem cobrança prévia • Autorizado Banco Central</span>
             </div>
 
           </div>
