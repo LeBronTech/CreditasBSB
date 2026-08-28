@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { LOAN_CATEGORIES } from '../data';
 import { LoanCategory } from '../types';
+import { WhatsAppIcon } from './WhatsAppIcon';
 import {
   calculateMonthlyInstallment,
   calculateSavingsComparedToBank,
@@ -11,7 +12,6 @@ import {
 } from '../utils/calculator';
 import {
   Calculator,
-  MessageCircle,
   Sparkles,
   ShieldCheck,
   CheckCircle2,
@@ -105,9 +105,13 @@ export const Simulator: React.FC<SimulatorProps> = ({ selectedCategory, onSelect
           <h2 className="text-2xl sm:text-4xl font-extrabold text-slate-900 tracking-tight font-['Outfit']">
             Simule seu crédito em <span className="text-[#D91E2A]">segundos</span>
           </h2>
-          <p className="mt-1 text-xs sm:text-sm text-slate-600">
-            Digite o valor desejado e escolha o prazo. Sem consulta ao SPC/Serasa e sem taxas prévias.
-          </p>
+          <div className="mt-2 text-xs sm:text-sm text-slate-600 space-y-1">
+            <p>Digite o valor desejado e escolha o prazo. Sem consulta ao SPC/Serasa e sem taxas prévias.</p>
+            <p className="font-semibold text-emerald-700">Taxas flexíveis para negativado.</p>
+            <p className="text-[11px] text-slate-500 italic">
+              Valores sujeito análise pessoal de crédito e disponibilidade dos bancos. (Segue alterações bancárias)
+            </p>
+          </div>
         </div>
 
         {/* Category Tabs Minimalist (INSS, SIAPE, Cartões) */}
@@ -322,7 +326,7 @@ export const Simulator: React.FC<SimulatorProps> = ({ selectedCategory, onSelect
                   className="w-full py-3.5 px-4 bg-[#25D366] hover:bg-[#20bd5a] text-white font-extrabold text-xs sm:text-sm rounded-2xl shadow-lg transition-all hover:scale-[1.01] active:scale-[0.99] flex items-center justify-center gap-2"
                   id="simulator-cta-whatsapp"
                 >
-                  <MessageCircle className="w-4 h-4 fill-white" />
+                  <WhatsAppIcon className="w-4 h-4 text-white" />
                   <span>Contratar no WhatsApp</span>
                 </a>
 
@@ -383,7 +387,7 @@ export const Simulator: React.FC<SimulatorProps> = ({ selectedCategory, onSelect
                   type="submit"
                   className="w-full py-3 bg-[#D91E2A] hover:bg-[#B91C1C] text-white font-extrabold text-xs sm:text-sm rounded-xl shadow-md transition-all flex items-center justify-center gap-2 cursor-pointer mt-1"
                 >
-                  <MessageCircle className="w-4 h-4 fill-white" />
+                  <WhatsAppIcon className="w-4 h-4 text-white" />
                   <span>Enviar para Atendente</span>
                 </button>
               </form>

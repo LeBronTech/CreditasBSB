@@ -1,12 +1,11 @@
 import React, { useState } from 'react';
 import { Header } from './components/Header';
 import { Hero } from './components/Hero';
-import { AntiFraudBanner } from './components/AntiFraudBanner';
+import { HowItWorks } from './components/HowItWorks';
 import { Simulator } from './components/Simulator';
 import { RateComparisonChart } from './components/RateComparisonChart';
-import { HowItWorks } from './components/HowItWorks';
-import { Testimonials } from './components/Testimonials';
 import { QuickLeadForm } from './components/QuickLeadForm';
+import { Testimonials } from './components/Testimonials';
 import { FAQ } from './components/FAQ';
 import { Footer } from './components/Footer';
 import { StickyWhatsAppBar } from './components/StickyWhatsAppBar';
@@ -51,12 +50,27 @@ export default function App() {
           onScrollToSimulator={scrollToSimulator}
         />
 
-        {/* 2. Security & Anti-Fraud Disclaimer */}
-        <ScrollReveal variant="fade-up" delay={0.1}>
-          <AntiFraudBanner />
+        {/* 2. 3-Step Simple Process (Contratação em 3 Passos) */}
+        <ScrollReveal variant="slide-left" delay={0.1}>
+          <HowItWorks />
         </ScrollReveal>
 
-        {/* 3. Interactive Loan Simulator (Digitável & Direct) */}
+        {/* 3. Rate & Cost Comparison Chart */}
+        <ScrollReveal variant="scale-blur" delay={0.1}>
+          <RateComparisonChart />
+        </ScrollReveal>
+
+        {/* 4. High Conversion Quick Lead Form */}
+        <ScrollReveal variant="scale-blur" delay={0.1}>
+          <QuickLeadForm />
+        </ScrollReveal>
+
+        {/* 5. Testimonials */}
+        <ScrollReveal variant="slide-right" delay={0.1}>
+          <Testimonials />
+        </ScrollReveal>
+
+        {/* 6. Interactive Loan Simulator (Digitável & Direct - Moved to end of page) */}
         <ScrollReveal variant="glass-pop" delay={0.1}>
           <Simulator
             selectedCategory={selectedCategory}
@@ -64,27 +78,7 @@ export default function App() {
           />
         </ScrollReveal>
 
-        {/* 4. Rate & Cost Comparison Chart */}
-        <ScrollReveal variant="scale-blur" delay={0.1}>
-          <RateComparisonChart />
-        </ScrollReveal>
-
-        {/* 5. 3-Step Simple Process */}
-        <ScrollReveal variant="slide-left" delay={0.1}>
-          <HowItWorks />
-        </ScrollReveal>
-
-        {/* 6. Testimonials */}
-        <ScrollReveal variant="slide-right" delay={0.1}>
-          <Testimonials />
-        </ScrollReveal>
-
-        {/* 7. High Conversion Lead Form */}
-        <ScrollReveal variant="scale-blur" delay={0.1}>
-          <QuickLeadForm />
-        </ScrollReveal>
-
-        {/* 8. FAQ with Search */}
+        {/* 7. FAQ with Search */}
         <ScrollReveal variant="fade-up" delay={0.1}>
           <FAQ />
         </ScrollReveal>

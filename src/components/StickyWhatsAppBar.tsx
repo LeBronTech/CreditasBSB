@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { WHATSAPP_NUMBER } from '../data';
-import { MessageCircle, X } from 'lucide-react';
+import { WhatsAppIcon } from './WhatsAppIcon';
 
 export const StickyWhatsAppBar: React.FC = () => {
   const [isVisible, setIsVisible] = useState(false);
-  const [isDismissed, setIsDismissed] = useState(false);
+  const [isDismissed] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -22,7 +22,7 @@ export const StickyWhatsAppBar: React.FC = () => {
   if (isDismissed || !isVisible) return null;
 
   const directWhatsAppUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(
-    'Olá Credita BSB! Gostaria de consultar uma proposta de crédito consignado.'
+    '♦️ Olá Credita BSB! Gostaria de consultar uma proposta de crédito consignado.'
   )}`;
 
   return (
@@ -37,7 +37,7 @@ export const StickyWhatsAppBar: React.FC = () => {
           id="fab-whatsapp"
         >
           <div className="relative">
-            <MessageCircle className="w-5 h-5 fill-white" />
+            <WhatsAppIcon className="w-5 h-5 text-white" />
             <span className="absolute -top-1 -right-1 w-2 h-2 bg-white rounded-full animate-ping" />
           </div>
           <span className="text-xs font-black tracking-wide hidden sm:inline font-['Outfit']">
@@ -51,7 +51,7 @@ export const StickyWhatsAppBar: React.FC = () => {
         <div className="flex items-center gap-2 min-w-0">
           <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse flex-shrink-0" />
           <p className="text-[11px] font-bold text-gray-200 truncate">
-            Taxa 1,39% • Pix no mesmo dia
+            Taxa a partir de 1,39% • Transferência rápida
           </p>
         </div>
 
@@ -61,7 +61,7 @@ export const StickyWhatsAppBar: React.FC = () => {
           rel="noopener noreferrer"
           className="flex-shrink-0 px-3.5 py-1.5 bg-[#25D366] text-white rounded-xl text-xs font-extrabold flex items-center gap-1.5 shadow-md"
         >
-          <MessageCircle className="w-3.5 h-3.5 fill-white" />
+          <WhatsAppIcon className="w-3.5 h-3.5 text-white" />
           <span>Simular</span>
         </a>
       </div>

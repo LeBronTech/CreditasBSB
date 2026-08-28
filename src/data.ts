@@ -2,13 +2,15 @@ import { LoanCategoryConfig, RateComparisonItem, Testimonial } from './types';
 
 export const WHATSAPP_NUMBER = '5561984443504';
 export const WHATSAPP_DISPLAY = '(61) 98444-3504';
-export const PHONE_DISPLAY = '(61) 98444-3504';
+export const WHATSAPP_SECONDARY = '(61) 98374-1464';
+export const PHONE_DISPLAY = '(61) 3224-9118';
 export const COMPANY_NAME = 'Credita BSB';
 export const COMPANY_TAGLINE = 'Seu Agente de Crédito';
 export const COMPANY_INSTAGRAM = '@creditabsb';
 export const COMPANY_INSTAGRAM_URL = 'https://www.instagram.com/creditabsb/';
-export const COMPANY_CNPJ = '42.123.456/0001-89';
-export const COMPANY_ADDRESS = 'Edifício Eldorado, Sala 613, Entrada A, Conic, Brasília - DF, CEP 70392-901';
+export const COMPANY_CNPJ = '15.202.214/0001-18';
+export const COMPANY_ADDRESS = 'SDS Edifício Eldorado, Sala 613, Entrada A, Conic, Brasília - DF, CEP 70392-901';
+export const COMPANY_HOURS = 'Segunda a Sexta: 09:00 às 18:00';
 export const COMPANY_YEARS = '+ de 17 anos no mercado';
 
 export const LOAN_CATEGORIES: Record<string, LoanCategoryConfig> = {
@@ -21,35 +23,45 @@ export const LOAN_CATEGORIES: Record<string, LoanCategoryConfig> = {
     maxAmount: 150000,
     defaultAmount: 15000,
     minMonths: 12,
-    maxMonths: 96,
+    maxMonths: 108,
     defaultMonths: 84,
     monthlyRate: 1.39,
     annualRate: 17.98,
-    popularMonths: [24, 36, 48, 60, 72, 84, 96],
-    description: 'Crédito com desconto em folha para aposentados e pensionistas do INSS. Sem consulta ao SPC/Serasa e liberação rápida via PIX.',
-    requirements: ['Aposentado ou Pensionista do INSS', 'Margem consignável disponível', 'Sem consulta ao SPC/Serasa']
+    popularMonths: [24, 36, 48, 60, 72, 84, 96, 108],
+    description: 'Crédito com desconto em folha para aposentados e pensionistas do INSS com a menor taxa do mercado. Sem consulta ao SPC/Serasa e liberação rápida via PIX.',
+    requirements: [
+      'Aposentado ou Pensionista do INSS',
+      'Margem consignável disponível',
+      'Sem consulta ao SPC/Serasa',
+      'Valores sujeito análise pessoal de crédito e disponibilidade dos bancos. (Pode ocorrer alterações por parte dos bancos)'
+    ]
   },
   siape: {
     id: 'siape',
-    name: 'Servidores Públicos (SIAPE & GDF)',
-    badge: 'Condições Especiais Brasília',
+    name: 'Servidores Públicos (SIAPE)',
+    badge: 'Taxa Especial 1,50% a.m.',
     tagline: 'Servidores Federais, Estaduais e Distritais',
     minAmount: 2000,
     maxAmount: 250000,
     defaultAmount: 30000,
     minMonths: 12,
-    maxMonths: 96,
-    defaultMonths: 84,
-    monthlyRate: 1.39,
-    annualRate: 17.98,
-    popularMonths: [24, 36, 48, 60, 72, 84, 96],
-    description: 'Linhas exclusivas para servidores públicos federais (SIAPE), estaduais e do Governo do Distrito Federal (GDF) com as melhores taxas do mercado.',
-    requirements: ['Servidor Público SIAPE ou GDF', 'Margem consignável ativa', 'Aprovação sem burocracia']
+    maxMonths: 120,
+    defaultMonths: 96,
+    monthlyRate: 1.50,
+    annualRate: 19.56,
+    popularMonths: [24, 36, 48, 60, 72, 84, 96, 120],
+    description: 'Linhas exclusivas para servidores públicos (SIAPE, federais, estaduais e distritais) em até 120 meses com taxas diferenciadas.',
+    requirements: [
+      'Servidores Federais, Estaduais e Distritais',
+      'Margem consignável disponível',
+      'Sem consulta ao SPC/Serasa',
+      'Valores sujeito análise pessoal de crédito e disponibilidade dos bancos. (Pode ocorrer alterações por parte dos bancos)'
+    ]
   },
   cartao: {
     id: 'cartao',
     name: 'Cartões Consignado e Benefício',
-    badge: 'Margem extra 5% + 5%',
+    badge: 'Taxa Especial 2,5% a.m.',
     tagline: 'Sem anuidade & Dinheiro na conta',
     minAmount: 500,
     maxAmount: 25000,
@@ -57,63 +69,70 @@ export const LOAN_CATEGORIES: Record<string, LoanCategoryConfig> = {
     minMonths: 12,
     maxMonths: 84,
     defaultMonths: 84,
-    monthlyRate: 1.80,
-    annualRate: 23.80,
+    monthlyRate: 2.50,
+    annualRate: 34.49,
     popularMonths: [24, 36, 48, 60, 84],
-    description: 'Cartão de Crédito Consignado e Cartão Benefício exclusivos para INSS e Servidores. Até 70% do limite liberado em dinheiro na conta + descontos em farmácias.',
-    requirements: ['Beneficiários INSS ou Servidores Públicos', 'Margem exclusiva para cartão', 'Sem anuidade e sem taxa de emissão']
+    description: 'Cartão de Crédito Consignado e Cartão Benefício exclusivos. Permite sacar até 100% do limite em dinheiro na conta além de oferecer descontos e benefícios.',
+    requirements: [
+      'Beneficiários INSS ou Servidores Públicos',
+      'Margem exclusiva para cartão (5%)',
+      'Sem anuidade e sem taxa de emissão',
+      'Valores sujeito análise pessoal de crédito e disponibilidade dos bancos. (Pode ocorrer alterações por parte dos bancos)'
+    ]
   }
 };
 
 export const COMPARISON_RATES: RateComparisonItem[] = [
   {
     institution: 'Credita BSB',
-    categoryName: 'Consignado Digital Especial',
+    categoryName: 'Consignado',
     monthlyRate: 1.39,
     badge: 'Menor Taxa',
     isBest: true
   },
   {
-    institution: 'Banco do Brasil / Caixa',
-    categoryName: 'Consignado Balcão',
-    monthlyRate: 2.15,
-    badge: '+55% mais caro'
+    institution: 'Outros Bancos',
+    categoryName: 'Média Consignado',
+    monthlyRate: 1.80,
+    badge: 'Média Mercado'
   },
   {
-    institution: 'Itaú / Bradesco',
-    categoryName: 'Consignado Tradicional',
-    monthlyRate: 2.35,
-    badge: '+69% mais caro'
-  },
-  {
-    institution: 'Santander',
-    categoryName: 'Crédito Pessoal',
-    monthlyRate: 5.95,
-    badge: '+328% mais caro'
-  },
-  {
-    institution: 'Nubank / Digitais',
-    categoryName: 'Empréstimo Pessoal',
-    monthlyRate: 6.45,
-    badge: '+364% mais caro'
+    institution: 'Financiamento',
+    categoryName: 'Veículo',
+    monthlyRate: 2.50,
+    badge: 'Média Mercado'
   },
   {
     institution: 'Cheque Especial',
     categoryName: 'Limite da Conta',
     monthlyRate: 8.40,
-    badge: '+504% mais caro'
+    badge: 'Muito Alto'
   },
   {
-    institution: 'Cartão de Crédito',
-    categoryName: 'Rotativo / Fatura',
+    institution: 'Cartão',
+    categoryName: 'de Crédito',
     monthlyRate: 14.50,
-    badge: '+943% mais caro'
+    badge: 'Juros Abusivos'
   }
 ];
 
 export const TESTIMONIALS: Testimonial[] = [
   {
     id: '1',
+    name: 'José Roberto de Oliveira',
+    role: 'PMDF',
+    category: 'siape',
+    city: 'Brasília',
+    state: 'DF',
+    avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&auto=format&fit=crop&q=80',
+    rating: 5,
+    loanAmount: 'R$ 38.000,00',
+    savings: 'Atendimento nota 10',
+    text: 'Atendimento nota 10! Já conheço a empresa há mais de 10 anos, a Patrícia sempre me atende muito bem e sempre faz o melhor.',
+    date: 'Há 2 dias'
+  },
+  {
+    id: '2',
     name: 'Dona Maria do Socorro',
     role: 'Aposentada INSS',
     category: 'inss',
@@ -124,10 +143,10 @@ export const TESTIMONIALS: Testimonial[] = [
     loanAmount: 'R$ 18.500,00',
     savings: 'R$ 4.300 em juros',
     text: 'A Credita BSB liberou meu consignado com a menor taxa de Brasília direto na minha conta no mesmo dia. Atendimento rápido e muito respeitoso!',
-    date: 'Há 2 dias'
+    date: 'Há 3 dias'
   },
   {
-    id: '2',
+    id: '3',
     name: 'Carlos Eduardo Mendes',
     role: 'Servidor Público SIAPE',
     category: 'siape',
@@ -141,7 +160,7 @@ export const TESTIMONIALS: Testimonial[] = [
     date: 'Há 4 dias'
   },
   {
-    id: '3',
+    id: '4',
     name: 'Valéria Cristina Ramos',
     role: 'Pensionista INSS (Cartão Benefício)',
     category: 'cartao',
@@ -151,21 +170,7 @@ export const TESTIMONIALS: Testimonial[] = [
     rating: 5,
     loanAmount: 'R$ 5.200,00',
     savings: 'Sem anuidade',
-    text: 'Fiz o cartão benefício e saquei parte do limite na mesma hora via Pix. Recomendo a todos!',
-    date: 'Há 1 semana'
-  },
-  {
-    id: '4',
-    name: 'José Roberto de Oliveira',
-    role: 'Servidor GDF',
-    category: 'siape',
-    city: 'Ceilândia',
-    state: 'DF',
-    avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&auto=format&fit=crop&q=80',
-    rating: 5,
-    loanAmount: 'R$ 28.000,00',
-    savings: 'Parcela reduzida',
-    text: 'Atendimento nota 10! Simulei pelo site e em poucos minutos o consultor já finalizou tudo com segurança.',
+    text: 'Fiz o cartão benefício e saquei o limite na mesma hora direto na conta. Recomendo a todos!',
     date: 'Há 1 semana'
   }
 ];
@@ -173,30 +178,35 @@ export const TESTIMONIALS: Testimonial[] = [
 export const FAQ_ITEMS = [
   {
     question: 'Quem pode contratar na Credita BSB?',
-    answer: 'Aposentados e Pensionistas do INSS, Servidores Públicos Federais (SIAPE), Servidores do GDF e beneficiários com margem consignável disponível.'
+    answer: 'Aposentados e Pensionistas do INSS, Servidores Públicos, celetista e beneficiários com limite disponível.'
   },
   {
-    question: 'Quem tem nome negativado pode fazer?',
-    answer: 'Sim! Como o desconto é em folha de pagamento ou benefício, não há consulta ao SPC ou Serasa.'
+    question: 'A credita cobra taxas antecipadas?',
+    answer: 'NUNCA! Não cobramos taxas antes do empréstimo. Na Credita BSB você não paga absolutamente nada antes. O dinheiro cai integralmente na sua conta.'
   },
   {
-    question: 'A Credita BSB cobra alguma taxa antecipada?',
-    answer: 'NUNCA! Cobrar taxas antes do empréstimo é golpe. Na Credita BSB você não paga absolutamente nada antes. O dinheiro cai integralmente na sua conta.'
+    question: 'Estou negativado, existe alguma possibilidade para mim?',
+    answer: 'Sim, trabalhamos com várias possibilidades como renegociação e portabilidade com taxas menores que possibilita a liberação de novos créditos, mesmo para negativados.'
+  },
+  {
+    question: 'Cartão consignado?',
+    answer: 'É um cartão sem anuidade com margem extra exclusiva de 5%, que permite sacar até 100% do limite em dinheiro na conta além de oferecer descontos benefícios. Também temos taxas atrativas nessa modalidade.'
+  },
+  {
+    question: 'Quem está com margem negativa ou sem margem?',
+    answer: 'Em alguns casos é possível fazer a redução da margem negativa com redução de parcela e renegociação de contratos.'
   },
   {
     question: 'Em quanto tempo o dinheiro é liberado?',
-    answer: 'Após a aprovação e assinatura digital da proposta, o valor é creditado via PIX ou TED na sua conta bancária em minutos.'
-  },
-  {
-    question: 'Como funciona o Cartão Benefício Consignado?',
-    answer: 'É um cartão sem anuidade com margem extra exclusiva de 5%, que permite sacar até 70% do limite em dinheiro na conta além de oferecer descontos em farmácias.'
+    answer: 'Via transferência bancária: Dinheiro liberado até no mesmo dia após a validação e assinatura digital.'
   }
 ];
 
 export const RECENT_SIMULATIONS = [
   { name: 'Maria S.', city: 'Brasília - DF', amount: 'R$ 18.000', type: 'Consignado INSS', time: 'Há 2 min' },
+  { name: 'José R.', city: 'PMDF / Brasília', amount: 'R$ 38.000', type: 'Servidor SIAPE', time: 'Há 4 min' },
   { name: 'Antônio R.', city: 'Conic / Asa Sul', amount: 'R$ 35.000', type: 'Servidor SIAPE', time: 'Há 5 min' },
   { name: 'João P.', city: 'Taguatinga - DF', amount: 'R$ 12.500', type: 'Consignado INSS', time: 'Há 7 min' },
-  { name: 'Valéria M.', city: 'Servidora GDF', amount: 'R$ 45.000', type: 'Servidor GDF', time: 'Há 10 min' },
+  { name: 'Valéria M.', city: 'Brasília - DF', amount: 'R$ 45.000', type: 'Servidor SIAPE', time: 'Há 10 min' },
   { name: 'Geraldo B.', city: 'Ceilândia - DF', amount: 'R$ 5.000', type: 'Cartão Benefício', time: 'Há 12 min' }
 ];

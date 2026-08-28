@@ -55,18 +55,18 @@ export function generateWhatsAppLink({
   const formattedAmount = formatCurrency(amount);
   const formattedInstallment = installmentValue ? formatCurrency(installmentValue) : '';
 
-  let message = `Olá, Credita BSB! Vim pelo site oficial e gostaria de simular meu Crédito Consignado com as menores taxas.\n\n`;
-  if (name) message += `👤 *Nome:* ${name}\n`;
-  message += `📋 *Modalidade:* ${categoryName}\n`;
-  message += `💰 *Valor Desejado:* ${formattedAmount}\n`;
-  message += `🗓️ *Prazo:* ${months}x parcelas\n`;
+  let message = `♦️ Olá, Credita BSB! Vim pelo site oficial e gostaria de fazer uma simulação de crédito.\n\n`;
+  if (name) message += `♦️ *Nome:* ${name}\n`;
+  message += `♦️ *Modalidade:* ${categoryName}\n`;
+  message += `♦️ *Valor Desejado:* ${formattedAmount}\n`;
+  message += `♦️ *Prazo:* ${months}x parcelas\n`;
   if (formattedInstallment) {
-    message += `💳 *Parcela Estimada:* ~${formattedInstallment}/mês\n`;
+    message += `♦️ *Parcela Estimada:* ~${formattedInstallment}/mês\n`;
   }
   if (additionalNotes) {
-    message += `📝 *Observação:* ${additionalNotes}\n`;
+    message += `♦️ *Observação:* ${additionalNotes}\n`;
   }
-  message += `\nQuero atendimento rápido para verificar minha margem e liberar via Pix!`;
+  message += `\n♦️ Solicito atendimento ágil para verificar disponibilidade e liberação do crédito!`;
 
   return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
 }

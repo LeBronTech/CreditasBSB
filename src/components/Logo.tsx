@@ -95,7 +95,7 @@ export const Logo: React.FC<LogoProps> = ({
             <span className={`font-black text-[#D91E2A] ${titleSizes[size]} font-['Outfit'] tracking-tight`}>
               CREDITA
             </span>
-            <span className={`font-black text-[#C41824] ${titleSizes[size]} font-['Outfit'] tracking-tight`}>
+            <span className={`font-black text-[#D91E2A] ${titleSizes[size]} font-['Outfit'] tracking-tight`}>
               BSB
             </span>
           </>
@@ -104,7 +104,7 @@ export const Logo: React.FC<LogoProps> = ({
             <span className={`font-black text-[#D91E2A] ${titleSizes[size]} font-['Outfit'] tracking-tight`}>
               CREDITA
             </span>
-            <span className={`font-black text-[#C41824] ${titleSizes[size]} font-['Outfit'] tracking-tight`}>
+            <span className={`font-black text-[#D91E2A] ${titleSizes[size]} font-['Outfit'] tracking-tight`}>
               BSB
             </span>
           </div>

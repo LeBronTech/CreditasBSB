@@ -1,242 +1,133 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { COMPARISON_RATES, WHATSAPP_NUMBER } from '../data';
-import { calculateMonthlyInstallment, calculateTotalPayment, formatCurrency } from '../utils/calculator';
-import { BarChart3, Sparkles, MessageCircle, CheckCircle2 } from 'lucide-react';
+import { WhatsAppIcon } from './WhatsAppIcon';
+import { BarChart3, Sparkles, CheckCircle2 } from 'lucide-react';
 
 export const RateComparisonChart: React.FC = () => {
-  const [compAmount, setCompAmount] = useState<number>(10000);
-  const [compMonths, setCompMonths] = useState<number>(36);
-
-  const creditaRate = COMPARISON_RATES[0].monthlyRate;
-  const creditaTotal = calculateTotalPayment(compAmount, compMonths, creditaRate);
-  const creditaPmt = calculateMonthlyInstallment(compAmount, compMonths, creditaRate);
-
   const maxRate = Math.max(...COMPARISON_RATES.map((r) => r.monthlyRate));
-  const minBarHeightPx = 50;
-  const maxBarHeightPx = 220;
+  const maxBarHeightPx = 155;
 
   const directWhatsAppUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(
-    `Olá Credita BSB! Vi o gráfico comparativo de taxas no site e quero economizar no meu consignado de ${formatCurrency(compAmount)} em ${compMonths}x com a taxa de 1,39% a.m.`
+    '♦️ Olá Credita BSB! Vi o gráfico comparativo de taxas no site e quero economizar no meu crédito com as menores taxas do mercado.'
   )}`;
 
   return (
-    <section id="comparativo" className="py-14 lg:py-20 relative scroll-mt-20 bg-[#F4F6F9] border-b border-slate-200">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+    <section id="comparativo" className="py-12 lg:py-16 relative scroll-mt-20 bg-[#F4F6F9] border-b border-slate-200">
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 relative z-10">
         
         {/* Section Header - Clean & Compact */}
-        <div className="text-center max-w-2xl mx-auto mb-8">
+        <div className="text-center max-w-2xl mx-auto mb-7">
           <div className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-red-50 border border-red-200 text-[#D91E2A] text-xs font-bold uppercase tracking-wider mb-2">
-            <BarChart3 className="w-3.5 h-3.5" /> Comparativo de Juros Bancários
+            <BarChart3 className="w-3.5 h-3.5" /> Comparativo de Juros Mensais
           </div>
-          <h2 className="text-2xl sm:text-4xl font-extrabold text-slate-900 tracking-tight font-['Outfit']">
-            Compare e veja o quanto você <span className="text-[#D91E2A]">economiza</span>
+          <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight font-['Outfit']">
+            Compare as taxas e veja onde você <span className="text-[#D91E2A]">economiza</span>
           </h2>
-          <p className="mt-2 text-xs sm:text-sm text-slate-600">
-            Juros reais do mercado comparados com a taxa consignada especial da Credita BSB.
+          <p className="mt-1.5 text-xs sm:text-sm text-slate-600">
+            Juros reais do mercado comparados com as taxas exclusivas da Credita BSB.
           </p>
         </div>
 
-        {/* Interactive Controls Box (Clean Light Slate) */}
-        <div className="bg-white p-5 sm:p-6 rounded-3xl border border-slate-200 shadow-sm mb-6 text-slate-900">
-          <div className="flex flex-col md:flex-row items-center justify-between gap-5">
-            
-            {/* Amount Digitável & Presets */}
-            <div className="w-full md:w-auto space-y-2">
-              <label className="block text-[11px] font-bold uppercase tracking-wider text-slate-700">
-                1. Valor do Empréstimo (digite ou selecione):
-              </label>
-              
-              <div className="flex items-center gap-2">
-                <div className="flex items-center rounded-xl bg-slate-50 border border-slate-300 focus-within:border-[#D91E2A] px-3 py-1.5 shadow-2xs">
-                  <span className="text-xs font-bold text-slate-500 mr-1.5">R$</span>
-                  <input
-                    type="text"
-                    inputMode="numeric"
-                    value={compAmount.toLocaleString('pt-BR')}
-                    onChange={(e) => {
-                      const val = parseInt(e.target.value.replace(/\D/g, ''), 10) || 1000;
-                      setCompAmount(val);
-                    }}
-                    className="w-24 sm:w-28 text-left font-black text-slate-900 focus:outline-hidden text-sm bg-transparent"
-                  />
-                </div>
-
-                <div className="flex flex-wrap gap-1">
-                  {[5000, 10000, 20000, 50000].map((val) => (
-                    <button
-                      key={val}
-                      type="button"
-                      onClick={() => setCompAmount(val)}
-                      className={`px-2.5 py-1.5 text-xs font-bold rounded-xl border transition-all cursor-pointer ${
-                        compAmount === val
-                          ? 'bg-[#D91E2A] text-white border-[#D91E2A] shadow-xs'
-                          : 'bg-slate-50 text-slate-700 border-slate-200 hover:border-slate-400'
-                      }`}
-                    >
-                      {formatCurrency(val)}
-                    </button>
-                  ))}
-                </div>
-              </div>
-            </div>
-
-            {/* Months Presets */}
-            <div className="w-full md:w-auto">
-              <label className="block text-[11px] font-bold uppercase tracking-wider text-slate-700 mb-2">
-                2. Prazo em Meses:
-              </label>
-              <div className="flex flex-wrap gap-1.5">
-                {[12, 24, 36, 48, 72, 84].map((m) => (
-                  <button
-                    key={m}
-                    type="button"
-                    onClick={() => setCompMonths(m)}
-                    className={`px-3 py-1.5 text-xs font-bold rounded-xl border transition-all cursor-pointer ${
-                      compMonths === m
-                        ? 'bg-[#D91E2A] text-white border-[#D91E2A] shadow-xs'
-                        : 'bg-slate-50 text-slate-700 border-slate-200 hover:border-slate-400'
-                    }`}
-                  >
-                    {m}x
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            {/* Savings Highlight */}
-            <div className="w-full md:w-auto bg-emerald-50 border border-emerald-300 rounded-2xl p-3.5 text-center md:text-right">
-              <span className="text-[11px] font-bold text-emerald-800 block uppercase">
-                Sua Economia com a Credita BSB:
-              </span>
-              <div className="text-xl sm:text-2xl font-black text-emerald-700 font-['Outfit']">
-                até {formatCurrency(calculateTotalPayment(compAmount, compMonths, 6.45) - creditaTotal)}
-              </div>
-              <span className="text-[10px] text-emerald-600">em relação ao crédito pessoal bancário</span>
-            </div>
-
-          </div>
-        </div>
-
-        {/* Vertical Bar Chart Container with Solid Clean Effect */}
-        <div className="bg-white p-4 sm:p-6 rounded-3xl border border-slate-200 shadow-sm overflow-x-auto text-slate-900">
+        {/* Unified Slim Columns Container with Tight Contour */}
+        <div className="bg-white p-3 sm:p-4 rounded-2xl border border-slate-200 shadow-sm overflow-x-auto text-slate-900 mb-6 max-w-3xl mx-auto">
           
-          <div className="min-w-[680px] pb-2">
+          <div className="min-w-[560px]">
             
-            {/* Chart Area */}
-            <div className="h-[280px] flex items-end justify-between gap-2.5 sm:gap-4 border-b border-slate-200 px-2 pb-0 relative">
-              
-              {/* Background Reference Lines */}
-              <div className="absolute inset-0 pointer-events-none flex flex-col justify-between opacity-30 border-dashed">
-                <div className="border-b border-slate-300 w-full text-[9px] text-slate-500 pt-0.5">Rotativo (14%+)</div>
-                <div className="border-b border-slate-300 w-full text-[9px] text-slate-500">Crédito Pessoal (5% - 8%)</div>
-                <div className="border-b border-slate-300 w-full text-[9px] text-slate-500">Bancos Tradicionais (2% - 3%)</div>
-                <div className="border-b border-emerald-600 w-full text-[9px] text-emerald-700 font-bold">Faixa Credita BSB (1,39%)</div>
-              </div>
-
+            {/* Background Benchmark Guide */}
+            <div className="grid grid-cols-5 gap-2 sm:gap-3 items-end">
               {COMPARISON_RATES.map((item, idx) => {
-                const itemPmt = calculateMonthlyInstallment(compAmount, compMonths, item.monthlyRate);
-                const heightRatio = item.monthlyRate / maxRate;
-                const barHeightPx = minBarHeightPx + heightRatio * (maxBarHeightPx - minBarHeightPx);
+                // Height progression: Credita stays minimal (16px), Outros Bancos & Veículo visibly larger
+                let barHeightPx = 16;
+                if (item.isBest) {
+                  barHeightPx = 16;
+                } else if (item.monthlyRate <= 2.0) {
+                  // Outros Bancos
+                  barHeightPx = 38;
+                } else if (item.monthlyRate <= 3.0) {
+                  // Financiamento Veículo
+                  barHeightPx = 58;
+                } else if (item.monthlyRate <= 10.0) {
+                  // Cheque Especial
+                  barHeightPx = 105;
+                } else {
+                  // Cartão de Crédito
+                  barHeightPx = 155;
+                }
 
                 return (
                   <div
                     key={idx}
-                    className="flex-1 flex flex-col items-center justify-end h-full z-10 group relative"
+                    className={`flex flex-col items-center justify-between rounded-xl p-2 sm:p-2.5 transition-all ${
+                      item.isBest
+                        ? 'bg-red-50/70 border border-red-200 shadow-xs'
+                        : 'bg-slate-50/80 border border-slate-200/80 hover:bg-slate-100/70'
+                    }`}
                   >
-                    {/* Floating Rate & Status Badge */}
-                    <div className="mb-1.5 text-center flex flex-col items-center gap-0.5">
+                    {/* Top Rate & Badge */}
+                    <div className="w-full text-center flex flex-col items-center gap-0.5 mb-1.5">
                       {item.isBest ? (
-                        <span className="inline-flex items-center gap-1 bg-[#D91E2A] text-white text-[9px] font-black uppercase px-2 py-0.5 rounded-full shadow-xs">
-                          <Sparkles className="w-2 h-2" /> Menor Taxa
+                        <span className="inline-flex items-center gap-1 bg-[#D91E2A] text-white text-[8px] font-black uppercase px-2 py-0.5 rounded-full shadow-xs">
+                          <Sparkles className="w-2 h-2" /> {item.badge}
                         </span>
                       ) : (
-                        <span className="bg-slate-100 text-slate-600 text-[9px] font-bold px-1.5 py-0.5 rounded-md border border-slate-200">
+                        <span className="bg-slate-200 text-slate-700 text-[8px] font-bold px-1.5 py-0.5 rounded-md">
                           {item.badge}
                         </span>
                       )}
 
                       <span
-                        className={`text-xs sm:text-sm font-black font-['Outfit'] ${
-                          item.isBest ? 'text-[#D91E2A]' : 'text-slate-700'
+                        className={`text-xs sm:text-sm font-black font-['Outfit'] mt-0.5 ${
+                          item.isBest ? 'text-[#D91E2A]' : 'text-slate-800'
                         }`}
                       >
-                        {item.monthlyRate.toString().replace('.', ',')}% <span className="text-[9px] font-normal text-slate-400">a.m.</span>
+                        {item.monthlyRate.toString().replace('.', ',')}%
+                        <span className="text-[8px] font-normal text-slate-400 block">a.m.</span>
                       </span>
                     </div>
 
-                    {/* The Vertical Bar */}
-                    <div
-                      style={{ height: `${barHeightPx}px` }}
-                      className={`w-full max-w-[75px] rounded-t-xl transition-all duration-500 flex flex-col justify-between items-center p-1.5 relative shadow-xs ${
-                        item.isBest
-                          ? 'bg-[#D91E2A] ring-2 ring-[#D91E2A]/50 text-white'
-                          : item.monthlyRate > 7
-                          ? 'bg-slate-700 text-white'
-                          : 'bg-slate-400 text-white'
-                      }`}
-                    >
-                      <div className="w-4 h-0.5 rounded-full bg-white/40 mb-0.5" />
-
-                      <div className="text-center">
-                        <span className="text-[8px] uppercase opacity-85 block font-bold">Parcela</span>
-                        <span className="text-[11px] sm:text-xs font-black whitespace-nowrap">
-                          {formatCurrency(itemPmt)}
-                        </span>
-                        <span className="text-[8px] opacity-85 block">/mês</span>
+                    {/* Vertical Slim Bar - Only Semi-Circle / Pill at top */}
+                    <div className="w-full flex items-end justify-center h-[160px] my-1">
+                      <div
+                        style={{ height: `${barHeightPx}px` }}
+                        className={`w-8 sm:w-10 rounded-t-full transition-all duration-500 flex flex-col justify-start items-center pt-1 relative shadow-xs ${
+                          item.isBest
+                            ? 'bg-[#D91E2A] ring-2 ring-[#D91E2A]/40'
+                            : item.monthlyRate > 7
+                            ? 'bg-slate-700'
+                            : 'bg-slate-400'
+                        }`}
+                      >
+                        {/* Semi-circle pill cap only */}
+                        <div className="w-3 h-0.5 rounded-full bg-white/75" />
                       </div>
                     </div>
-                  </div>
-                );
-              })}
-            </div>
 
-            {/* Bottom Labels */}
-            <div className="flex justify-between gap-2.5 sm:gap-4 mt-3 px-2">
-              {COMPARISON_RATES.map((item, idx) => {
-                const itemTotal = calculateTotalPayment(compAmount, compMonths, item.monthlyRate);
-                const diffWithCredita = itemTotal - creditaTotal;
-
-                return (
-                  <div
-                    key={idx}
-                    className={`flex-1 text-center p-2 rounded-xl transition-all ${
-                      item.isBest
-                        ? 'bg-red-50 border border-red-200'
-                        : 'bg-slate-50 border border-slate-200'
-                    }`}
-                  >
-                    <h4
-                      className={`font-black text-[11px] sm:text-xs font-['Outfit'] leading-tight ${
-                        item.isBest ? 'text-[#D91E2A]' : 'text-slate-900'
-                      }`}
-                    >
-                      {item.institution}
-                    </h4>
-
-                    <span className="text-[9px] text-slate-500 block mt-0.5 leading-tight truncate">
-                      {item.categoryName}
-                    </span>
-
-                    <div className="mt-1.5 pt-1.5 border-t border-slate-200">
-                      <span className="text-[8px] text-slate-500 block uppercase">Total Final</span>
-                      <span
-                        className={`text-[11px] font-extrabold block ${
-                          item.isBest ? 'text-slate-900' : 'text-slate-700'
+                    {/* Integrated Bottom Text Block with Institution and Category cleanly stacked */}
+                    <div className="w-full pt-1.5 mt-1 border-t border-slate-200 text-center">
+                      <h4
+                        className={`font-black text-[11px] sm:text-xs font-['Outfit'] leading-tight ${
+                          item.isBest ? 'text-[#D91E2A]' : 'text-slate-900'
                         }`}
                       >
-                        {formatCurrency(itemTotal)}
+                        {item.institution}
+                      </h4>
+                      <span className="text-[9.5px] font-medium text-slate-500 block leading-tight mt-0.5">
+                        {item.categoryName}
                       </span>
-
-                      {item.isBest ? (
-                        <span className="text-[9px] font-bold text-emerald-700 block mt-0.5 flex items-center justify-center gap-0.5">
-                          <CheckCircle2 className="w-2.5 h-2.5 text-emerald-600" /> Mais barato
-                        </span>
-                      ) : (
-                        <span className="text-[9px] font-bold text-red-600 block mt-0.5">
-                          + {formatCurrency(diffWithCredita)}
-                        </span>
-                      )}
+                      
+                      <div className="mt-1 pt-1 border-t border-slate-200/60">
+                        {item.isBest ? (
+                          <span className="text-[8.5px] font-bold text-emerald-700 flex items-center justify-center gap-0.5">
+                            <CheckCircle2 className="w-2.5 h-2.5 text-emerald-600" /> Menor Taxa
+                          </span>
+                        ) : (
+                          <span className="text-[8.5px] font-semibold text-slate-600 block">
+                            {item.monthlyRate.toString().replace('.', ',')}% a.m.
+                          </span>
+                        )}
+                      </div>
                     </div>
+
                   </div>
                 );
               })}
@@ -247,7 +138,7 @@ export const RateComparisonChart: React.FC = () => {
         </div>
 
         {/* Action Callout below the chart */}
-        <div className="mt-6 bg-[#12141C] text-white p-5 sm:p-6 rounded-3xl shadow-xl flex flex-col sm:flex-row items-center justify-between gap-4 border border-[#232736]">
+        <div className="bg-[#12141C] text-white p-4 sm:p-5 rounded-2xl shadow-xl flex flex-col sm:flex-row items-center justify-between gap-3 border border-[#232736] max-w-3xl mx-auto">
           <div className="space-y-0.5 text-center sm:text-left">
             <div className="flex items-center justify-center sm:justify-start gap-1.5 text-emerald-400 text-xs font-bold uppercase tracking-wider">
               <Sparkles className="w-3.5 h-3.5" /> Garantia da Menor Taxa
@@ -261,11 +152,11 @@ export const RateComparisonChart: React.FC = () => {
             href={directWhatsAppUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 px-5 py-3 bg-[#25D366] hover:bg-[#20bd5a] text-white font-bold text-xs sm:text-sm rounded-xl shadow-md transition-all hover:scale-105 active:scale-95 whitespace-nowrap"
-            id="comparativo-cta-whatsapp"
+            className="inline-flex items-center justify-center gap-2 px-6 py-3.5 bg-[#25D366] hover:bg-[#20bd5a] text-white font-extrabold text-xs sm:text-sm rounded-2xl shadow-lg transition-all hover:scale-[1.02] active:scale-[0.98] whitespace-nowrap cursor-pointer"
+            id="chart-cta-whatsapp"
           >
-            <MessageCircle className="w-4 h-4 fill-white" />
-            <span>Simular Taxa 1,39% no WhatsApp</span>
+            <WhatsAppIcon className="w-4 h-4 text-white" />
+            <span>Consultar Minha Taxa</span>
           </a>
         </div>
 

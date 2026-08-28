@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Logo } from './Logo';
-import { MessageCircle, Menu, X } from 'lucide-react';
+import { WhatsAppIcon } from './WhatsAppIcon';
+import { Menu, X } from 'lucide-react';
 import { WHATSAPP_NUMBER } from '../data';
 import { LiveSimulationAlert } from './LiveSimulationAlert';
 
@@ -12,7 +13,7 @@ export const Header: React.FC<HeaderProps> = ({ onOpenSimulator }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const directWhatsAppUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(
-    'Olá Credita BSB! Gostaria de consultar uma simulação de crédito.'
+    '♦️ Olá Credita BSB! Gostaria de consultar uma simulação de crédito.'
   )}`;
 
   return (
@@ -30,18 +31,21 @@ export const Header: React.FC<HeaderProps> = ({ onOpenSimulator }) => {
 
           {/* Desktop Nav Links */}
           <nav className="hidden lg:flex items-center gap-6 text-xs font-bold text-slate-700 uppercase tracking-wider">
-            <a href="#simulador" className="hover:text-[#D91E2A] transition-colors py-1">
-              Simulador
+            <a href="#como-funciona" className="hover:text-[#D91E2A] transition-colors py-1">
+              Como Funciona
             </a>
             <a href="#comparativo" className="hover:text-[#D91E2A] transition-colors py-1 flex items-center gap-1">
               Comparativo
               <span className="bg-[#D91E2A] text-white text-[9px] font-black px-1.5 py-0.5 rounded-sm">1,39%</span>
             </a>
-            <a href="#como-funciona" className="hover:text-[#D91E2A] transition-colors py-1">
-              Como Funciona
+            <a href="#contato" className="hover:text-[#D91E2A] transition-colors py-1">
+              Contato
             </a>
             <a href="#depoimentos" className="hover:text-[#D91E2A] transition-colors py-1">
               Depoimentos
+            </a>
+            <a href="#simulador" className="hover:text-[#D91E2A] transition-colors py-1">
+              Simulador
             </a>
             <a href="#duvidas" className="hover:text-[#D91E2A] transition-colors py-1">
               Dúvidas
@@ -65,7 +69,7 @@ export const Header: React.FC<HeaderProps> = ({ onOpenSimulator }) => {
               className="inline-flex items-center gap-1.5 px-4 py-2 bg-[#25D366] hover:bg-[#20bd5a] text-white text-xs font-bold rounded-xl shadow-md transition-all active:scale-98"
               id="header-cta-whatsapp"
             >
-              <MessageCircle className="w-3.5 h-3.5 fill-white" />
+              <WhatsAppIcon className="w-3.5 h-3.5 text-white" />
               <span>WhatsApp</span>
             </a>
           </div>
@@ -76,11 +80,11 @@ export const Header: React.FC<HeaderProps> = ({ onOpenSimulator }) => {
               href={directWhatsAppUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="p-2 bg-[#25D366] text-white rounded-xl shadow-sm"
+              className="p-2 bg-[#25D366] text-white rounded-xl shadow-sm flex items-center justify-center"
               title="WhatsApp"
               id="header-mobile-whatsapp"
             >
-              <MessageCircle className="w-4 h-4 fill-white" />
+              <WhatsAppIcon className="w-4 h-4 text-white" />
             </a>
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
@@ -140,8 +144,8 @@ export const Header: React.FC<HeaderProps> = ({ onOpenSimulator }) => {
               rel="noopener noreferrer"
               className="w-full flex items-center justify-center gap-2 py-3 bg-[#25D366] text-white font-bold rounded-xl shadow-md text-xs"
             >
-              <MessageCircle className="w-4 h-4 fill-white" />
-              Falar no WhatsApp
+              <WhatsAppIcon className="w-4 h-4 text-white" />
+              <span>Falar no WhatsApp</span>
             </a>
           </div>
         </div>

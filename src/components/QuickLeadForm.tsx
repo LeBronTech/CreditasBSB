@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import { LOAN_CATEGORIES, WHATSAPP_NUMBER } from '../data';
+import { LOAN_CATEGORIES } from '../data';
 import { LoanCategory } from '../types';
-import { formatCurrency, maskPhone, maskCPF, generateWhatsAppLink } from '../utils/calculator';
-import { ShieldCheck, CheckCircle2, MessageCircle, Sparkles, ArrowRight } from 'lucide-react';
+import { maskPhone, maskCPF, generateWhatsAppLink } from '../utils/calculator';
+import { WhatsAppIcon } from './WhatsAppIcon';
+import { ShieldCheck, CheckCircle2, Sparkles, ArrowRight } from 'lucide-react';
 
 export const QuickLeadForm: React.FC = () => {
   const [name, setName] = useState('');
@@ -11,22 +12,20 @@ export const QuickLeadForm: React.FC = () => {
   const [category, setCategory] = useState<LoanCategory>('inss');
   const [amount, setAmount] = useState<number>(15000);
   const [installments, setInstallments] = useState<number>(84);
-  const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
 
   const selectedCategoryConfig = LOAN_CATEGORIES[category] || LOAN_CATEGORIES['inss'];
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    setIsSuccessModalOpen(true);
+    const whatsappUrl = generateWhatsAppLink({
+      name,
+      categoryName: selectedCategoryConfig.name,
+      amount,
+      months: installments,
+      additionalNotes: cpf ? `CPF: ${cpf}` : undefined,
+    });
+    window.open(whatsappUrl, '_blank');
   };
-
-  const whatsappUrl = generateWhatsAppLink({
-    name,
-    categoryName: selectedCategoryConfig.name,
-    amount,
-    months: installments,
-    additionalNotes: cpf ? `CPF: ${cpf}` : undefined,
-  });
 
   return (
     <section id="contato" className="py-14 lg:py-20 relative bg-gradient-to-br from-[#8B0000] via-[#A8131D] to-[#5C060B] border-y border-[#D91E2A]/40 shadow-2xl text-white">
@@ -45,7 +44,7 @@ export const QuickLeadForm: React.FC = () => {
             </h2>
 
             <p className="text-red-100 text-xs sm:text-sm leading-relaxed">
-              Sem burocracia, sem consulta ao SPC/Serasa e sem taxas antecipadas. Receba sua análise em minutos diretamente no WhatsApp.
+              Consignado Servidores públicos e INSS com a menor taxa do mercado, cartões consignado e benefício com aprovação rápida sem burocracia.
             </p>
 
             {/* Direct Checklist */}
@@ -56,12 +55,20 @@ export const QuickLeadForm: React.FC = () => {
               </div>
               <div className="flex items-center gap-2">
                 <CheckCircle2 className="w-4 h-4 text-emerald-300 flex-shrink-0" />
-                <span><strong>Dinheiro na conta via Pix</strong> no mesmo dia</span>
+                <span><strong>Dinheiro liberado via transferência bancária</strong></span>
               </div>
               <div className="flex items-center gap-2">
                 <CheckCircle2 className="w-4 h-4 text-emerald-300 flex-shrink-0" />
-                <span><strong>Negativados são aprovados</strong></span>
+                <span><strong>Sem consulta ao SPC/Serasa</strong></span>
               </div>
+              <div className="flex items-center gap-2">
+                <CheckCircle2 className="w-4 h-4 text-emerald-300 flex-shrink-0" />
+                <span><strong>Taxas flexíveis para negativado</strong></span>
+              </div>
+            </div>
+
+            <div className="p-3 bg-black/20 border border-white/20 rounded-2xl text-[11px] text-red-100/90 leading-relaxed">
+              Valores sujeito análise pessoal de crédito e disponibilidade dos bancos. (Segue alterações bancárias)
             </div>
 
             <div className="p-3.5 bg-black/20 border border-white/20 rounded-2xl flex items-center gap-2.5 text-xs text-red-100">
@@ -79,7 +86,7 @@ export const QuickLeadForm: React.FC = () => {
                   Simulação Rápida
                 </h3>
                 <p className="text-[11px] text-slate-500">
-                  Receba a proposta calculada no seu WhatsApp sem compromisso.
+                  Receba a proposta calculada no seu WhatsApp diretamente sem intermediários.
                 </p>
               </div>
 
@@ -203,18 +210,21 @@ export const QuickLeadForm: React.FC = () => {
                       <option value={72}>72 parcelas</option>
                       <option value={84}>84 parcelas</option>
                       <option value={96}>96 parcelas</option>
+                      <option value={108}>108 parcelas</option>
+                      <option value={120}>120 parcelas (SIAPE)</option>
                     </select>
                   </div>
                 </div>
 
-                {/* Submit Action Button */}
+                {/* Submit Action Button - DIRECT to WhatsApp */}
                 <div className="pt-1">
                   <button
                     type="submit"
-                    className="w-full py-3 px-4 bg-[#D91E2A] hover:bg-[#B91C1C] text-white font-extrabold text-xs sm:text-sm rounded-xl shadow-lg transition-all hover:scale-[1.01] active:scale-[0.99] flex items-center justify-center gap-2 cursor-pointer"
+                    className="w-full py-3.5 px-4 bg-[#25D366] hover:bg-[#20bd5a] text-white font-extrabold text-xs sm:text-sm rounded-xl shadow-lg transition-all hover:scale-[1.01] active:scale-[0.99] flex items-center justify-center gap-2 cursor-pointer"
                     id="form-submit-button"
                   >
-                    <span>Receber Proposta no WhatsApp</span>
+                    <WhatsAppIcon className="w-4 h-4 text-white" />
+                    <span>Enviar Proposta Direto no WhatsApp</span>
                     <ArrowRight className="w-4 h-4" />
                   </button>
                 </div>
@@ -231,51 +241,6 @@ export const QuickLeadForm: React.FC = () => {
         </div>
 
       </div>
-
-      {/* Success Modal */}
-      {isSuccessModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md">
-          <div className="bg-white text-gray-900 rounded-3xl p-6 max-w-sm w-full shadow-2xl border border-gray-200 text-center space-y-3">
-            <div className="w-12 h-12 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center mx-auto">
-              <CheckCircle2 className="w-6 h-6" />
-            </div>
-
-            <h3 className="text-lg font-black text-gray-900 font-['Outfit']">
-              Simulação Pronta!
-            </h3>
-
-            <p className="text-xs text-gray-600">
-              Proposta calculada para <strong>{formatCurrency(amount)}</strong> em <strong>{installments}x</strong> no <strong>{selectedCategoryConfig.name}</strong>.
-            </p>
-
-            <div className="p-2.5 bg-emerald-50 rounded-xl border border-emerald-200 text-xs text-emerald-900 font-medium">
-              Clique abaixo para conversar diretamente com o consultor:
-            </div>
-
-            <div className="space-y-2 pt-1">
-              <a
-                href={whatsappUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                onClick={() => setIsSuccessModalOpen(false)}
-                className="w-full flex items-center justify-center gap-2 py-2.5 bg-[#25D366] hover:bg-[#20bd5a] text-white font-bold text-xs rounded-xl shadow-md"
-              >
-                <MessageCircle className="w-4 h-4 fill-white" />
-                <span>Abrir no WhatsApp</span>
-              </a>
-
-              <button
-                type="button"
-                onClick={() => setIsSuccessModalOpen(false)}
-                className="w-full py-1.5 text-xs text-gray-500 hover:text-gray-800 font-semibold cursor-pointer"
-              >
-                Fechar
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
     </section>
   );
 };

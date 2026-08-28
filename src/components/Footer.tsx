@@ -1,20 +1,24 @@
 import React from 'react';
 import { Logo } from './Logo';
+import { WhatsAppIcon } from './WhatsAppIcon';
 import {
   COMPANY_NAME,
   COMPANY_CNPJ,
   COMPANY_ADDRESS,
   WHATSAPP_DISPLAY,
+  WHATSAPP_SECONDARY,
+  PHONE_DISPLAY,
   WHATSAPP_NUMBER,
   COMPANY_INSTAGRAM,
   COMPANY_INSTAGRAM_URL,
   COMPANY_YEARS,
+  COMPANY_HOURS,
 } from '../data';
-import { MessageCircle, Phone, MapPin, Instagram } from 'lucide-react';
+import { Phone, MapPin, Instagram } from 'lucide-react';
 
 export const Footer: React.FC = () => {
   const whatsappUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(
-    'Olá Credita BSB! Gostaria de tirar uma dúvida sobre crédito consignado.'
+    '♦️ Olá Credita BSB! Gostaria de tirar uma dúvida sobre crédito consignado.'
   )}`;
 
   return (
@@ -28,7 +32,7 @@ export const Footer: React.FC = () => {
           <div className="lg:col-span-5 space-y-3">
             <Logo variant="dark" size="md" />
             <p className="text-gray-400 text-xs max-w-md leading-relaxed mt-2">
-              <strong className="text-white">Credita BSB - Seu Agente de Crédito</strong> ({COMPANY_YEARS}). Correspondente bancário autorizado pelo Banco Central, especializado em Consignado INSS, Servidores SIAPE, Cartões e Portabilidades.
+              <strong className="text-white">Credita BSB - Seu Agente de Crédito</strong> ({COMPANY_YEARS}). Correspondente bancário autorizado pelo Banco Central, especializado em Consignado INSS, Servidores Públicos (SIAPE), Cartões e Financiamentos.
             </p>
             
             <div className="pt-2 flex flex-col gap-2 text-xs text-gray-300">
@@ -38,7 +42,11 @@ export const Footer: React.FC = () => {
               </div>
               <div className="flex items-center gap-2">
                 <Phone className="w-3.5 h-3.5 text-[#D91E2A] flex-shrink-0" />
-                <span className="text-[11px]">WhatsApp: <strong className="text-white">{WHATSAPP_DISPLAY}</strong></span>
+                <span className="text-[11px]">Telefone: <strong className="text-white">{PHONE_DISPLAY}</strong></span>
+              </div>
+              <div className="flex items-center gap-2">
+                <WhatsAppIcon className="w-3.5 h-3.5 text-[#25D366] flex-shrink-0" />
+                <span className="text-[11px]">WhatsApp: <strong className="text-white">{WHATSAPP_DISPLAY}</strong> • <strong className="text-white">{WHATSAPP_SECONDARY}</strong></span>
               </div>
               <div className="flex items-center gap-2">
                 <Instagram className="w-3.5 h-3.5 text-[#D91E2A] flex-shrink-0" />
@@ -64,7 +72,7 @@ export const Footer: React.FC = () => {
                 <a href="#simulador" className="hover:text-white transition-colors">Consignado INSS</a>
               </li>
               <li>
-                <a href="#simulador" className="hover:text-white transition-colors">Servidores SIAPE e GDF</a>
+                <a href="#simulador" className="hover:text-white transition-colors">Servidores Públicos (SIAPE)</a>
               </li>
               <li>
                 <a href="#simulador" className="hover:text-white transition-colors">Cartões Consignado e Benefício</a>
@@ -86,7 +94,7 @@ export const Footer: React.FC = () => {
                 <span>Atendimento Online e no Conic</span>
               </div>
               <p className="text-[11px] text-gray-300">
-                Segunda a Sexta: 08:00 às 18:00
+                {COMPANY_HOURS}
               </p>
               <a
                 href={whatsappUrl}
@@ -94,7 +102,7 @@ export const Footer: React.FC = () => {
                 rel="noopener noreferrer"
                 className="w-full flex items-center justify-center gap-2 py-2.5 bg-[#25D366] hover:bg-[#20bd5a] text-white font-bold rounded-xl text-xs transition-all shadow-md"
               >
-                <MessageCircle className="w-4 h-4 fill-white" />
+                <WhatsAppIcon className="w-4 h-4 text-white" />
                 <span>Conversar no WhatsApp</span>
               </a>
             </div>
