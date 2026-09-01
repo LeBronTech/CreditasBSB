@@ -75,9 +75,12 @@ export const Simulator: React.FC<SimulatorProps> = ({ selectedCategory, onSelect
   // Effective amount for calculation (ensure at least minAmount or fallback)
   const effectiveAmount = amount > 0 ? amount : config.minAmount;
 
+  // Rate used in calculation (maintains displayed rate while using adjusted factor e.g. 1.55% for 1.50%)
+  const calculationRate = config.calculationMonthlyRate ?? (config.monthlyRate + 0.05);
+
   // Calculations
-  const installment = calculateMonthlyInstallment(effectiveAmount, months, config.monthlyRate);
-  const totalSavings = calculateSavingsComparedToBank(effectiveAmount, months, config.monthlyRate);
+  const installment = calculateMonthlyInstallment(effectiveAmount, months, calculationRate);
+  const totalSavings = calculateSavingsComparedToBank(effectiveAmount, months, calculationRate);
 
   const whatsappUrl = generateWhatsAppLink({
     name: customerName,

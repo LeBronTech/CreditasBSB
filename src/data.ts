@@ -26,9 +26,10 @@ export const LOAN_CATEGORIES: Record<string, LoanCategoryConfig> = {
     maxMonths: 108,
     defaultMonths: 84,
     monthlyRate: 1.39,
+    calculationMonthlyRate: 1.44,
     annualRate: 17.98,
     popularMonths: [24, 36, 48, 60, 72, 84, 96, 108],
-    description: 'Crédito com desconto em folha para aposentados e pensionistas do INSS com a menor taxa do mercado. Sem consulta ao SPC/Serasa e liberação rápida via PIX.',
+    description: 'Crédito com desconto em folha para aposentados e pensionistas do INSS com a menor taxa do mercado. Sem consulta ao SPC/Serasa e liberação rápida em conta.',
     requirements: [
       'Aposentado ou Pensionista do INSS',
       'Margem consignável disponível',
@@ -48,6 +49,7 @@ export const LOAN_CATEGORIES: Record<string, LoanCategoryConfig> = {
     maxMonths: 120,
     defaultMonths: 96,
     monthlyRate: 1.50,
+    calculationMonthlyRate: 1.55,
     annualRate: 19.56,
     popularMonths: [24, 36, 48, 60, 72, 84, 96, 120],
     description: 'Linhas exclusivas para servidores públicos (SIAPE, federais, estaduais e distritais) em até 120 meses com taxas diferenciadas.',
@@ -70,6 +72,7 @@ export const LOAN_CATEGORIES: Record<string, LoanCategoryConfig> = {
     maxMonths: 84,
     defaultMonths: 84,
     monthlyRate: 2.50,
+    calculationMonthlyRate: 2.55,
     annualRate: 34.49,
     popularMonths: [24, 36, 48, 60, 84],
     description: 'Cartão de Crédito Consignado e Cartão Benefício exclusivos. Permite sacar até 100% do limite em dinheiro na conta além de oferecer descontos e benefícios.',
@@ -190,7 +193,7 @@ export const FAQ_ITEMS = [
   },
   {
     question: 'Cartão consignado?',
-    answer: 'É um cartão sem anuidade com margem extra exclusiva de 5%, que permite sacar até 100% do limite em dinheiro na conta além de oferecer descontos benefícios. Também temos taxas atrativas nessa modalidade.'
+    answer: 'É um cartão sem anuidade com margem extra exclusiva de 5%, que permite sacar até 100% do limite em dinheiro na conta além de oferecer descontos e benefícios. Também temos taxas atrativas nessa modalidade.'
   },
   {
     question: 'Quem está com margem negativa ou sem margem?',

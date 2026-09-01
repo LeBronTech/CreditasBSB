@@ -12,6 +12,7 @@ export interface LoanCategoryConfig {
   maxMonths: number;
   defaultMonths: number;
   monthlyRate: number; // e.g. 1.39%
+  calculationMonthlyRate?: number; // calculation rate in simulator
   annualRate: number;
   popularMonths: number[];
   description: string;

@@ -83,10 +83,10 @@ export const Hero: React.FC<HeroProps> = ({
     isWhatsAppOnly?: boolean;
   }[] = [
     { id: 'inss', label: 'Consignado INSS', rate: 'A partir de 1,39% a.m.', tag: 'Menor Taxa', icon: Landmark },
-    { id: 'siape', label: 'Servidores SIAPE', rate: 'A partir de 1,50% a.m.', tag: 'Até 120x', icon: Building2 },
+    { id: 'siape', label: 'Servidores Público', rate: 'A partir de 1,50% a.m.', tag: 'Até 120x', icon: Building2 },
     { id: 'cartao', label: 'Cartões Consignado', rate: 'A partir de 2,5% a.m.', tag: 'Sem anuidade', icon: CreditCard },
-    { id: 'portabilidade_fgts', label: 'Portabilidade & FGTS', rate: 'Taxas acessíveis', tag: 'Melhor Condição', icon: ArrowLeftRight, isWhatsAppOnly: true },
-    { id: 'clt', label: 'Crédito CLT', rate: 'Taxas acessíveis', tag: 'Sem burocracia', icon: Briefcase, isWhatsAppOnly: true },
+    { id: 'portabilidade_fgts', label: 'Portabilidade de Empréstimo', rate: 'Taxas acessíveis', tag: 'Melhor Condição', icon: ArrowLeftRight, isWhatsAppOnly: true },
+    { id: 'clt', label: 'CLT e Saque FGTS', rate: 'Taxas acessíveis', tag: 'Sem burocracia', icon: Briefcase, isWhatsAppOnly: true },
   ];
 
   const handleServiceClick = (svc: typeof quickServices[0]) => {
