@@ -17,7 +17,7 @@ export const ScrollReveal: React.FC<ScrollRevealProps> = ({
   className = '',
 }) => {
   const ref = useRef<HTMLDivElement>(null);
-  const isInView = useInView(ref, { once: false, margin: '-50px' });
+  const isInView = useInView(ref, { once: true, margin: '-20px' });
 
   const getVariants = () => {
     switch (variant) {

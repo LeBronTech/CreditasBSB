@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { motion, AnimatePresence } from 'motion/react';
 import { LOAN_CATEGORIES } from '../data';
 import { LoanCategory } from '../types';
 import { WhatsAppIcon } from './WhatsAppIcon';
@@ -117,40 +118,99 @@ export const Simulator: React.FC<SimulatorProps> = ({ selectedCategory, onSelect
           </div>
         </div>
 
-        {/* Category Tabs Minimalist (INSS, SIAPE, Cartões) */}
-        <div className="flex justify-center mb-6">
-          <div className="inline-flex p-1.5 bg-slate-100 border border-slate-200 rounded-2xl max-w-full overflow-x-auto gap-1 shadow-sm">
+        {/* Integrated Crown-Style Category Selector (Physically fused with the simulator card below) */}
+        <div className="max-w-4xl mx-auto px-2 sm:px-4 relative z-20">
+          <div className="grid grid-cols-3 gap-1.5 sm:gap-3 max-w-2xl mx-auto relative">
             {(Object.keys(LOAN_CATEGORIES) as LoanCategory[]).map((catKey) => {
               const item = LOAN_CATEGORIES[catKey];
               const isSelected = selectedCategory === catKey;
+              
+              const shortLabels: Record<LoanCategory, { title: string; subtitle: string; rate: string }> = {
+                inss: { title: 'INSS', subtitle: 'Aposentados', rate: '1,39% a.m.' },
+                siape: { title: 'Servidores', subtitle: 'Públicos', rate: '1,50% a.m.' },
+                cartao: { title: 'Cartões', subtitle: 'Consignado', rate: '2,50% a.m.' },
+              };
+              const info = shortLabels[catKey];
+
               return (
                 <button
                   key={catKey}
+                  type="button"
                   onClick={() => handleCategoryChange(catKey)}
-                  className={`px-3.5 sm:px-5 py-2.5 rounded-xl font-bold text-xs sm:text-sm whitespace-nowrap transition-all duration-200 cursor-pointer ${
+                  className={`relative flex flex-col items-center justify-between p-2 sm:p-3 rounded-t-2xl sm:rounded-t-3xl transition-all duration-300 cursor-pointer text-center select-none ${
                     isSelected
-                      ? 'bg-[#D91E2A] text-white shadow-md'
-                      : 'text-slate-600 hover:text-slate-900 hover:bg-slate-200/70'
+                      ? '-translate-y-2 sm:-translate-y-3 z-30 bg-slate-50 border-t-2 border-x-2 border-b-0 border-[#D91E2A] text-slate-900 shadow-2xl shadow-red-500/20'
+                      : 'translate-y-0 opacity-75 hover:opacity-100 bg-slate-200/90 border-t border-x border-b-0 border-slate-300 text-slate-600 hover:bg-slate-200 shadow-xs'
                   }`}
                   id={`tab-category-${catKey}`}
                 >
-                  <div className="flex items-center gap-2">
-                    {catKey === 'inss' && <Landmark className="w-4 h-4" />}
-                    {catKey === 'siape' && <Building2 className="w-4 h-4" />}
-                    {catKey === 'cartao' && <CreditCard className="w-4 h-4" />}
-                    <span>{item.name}</span>
+                  {/* Bottom connector patch to physically weld active card to the main box below */}
+                  {isSelected && (
+                    <div className="absolute -bottom-3 left-0 right-0 h-4 bg-slate-50 z-30" />
+                  )}
+
+                  {/* Active Indicator Top Tag with card pop effect */}
+                  {isSelected && (
+                    <span className="absolute -top-3 bg-[#D91E2A] text-white text-[7.5px] sm:text-[8.5px] font-black uppercase px-2.5 py-0.5 rounded-full shadow-md tracking-wider animate-bounce">
+                      Selecionado
+                    </span>
+                  )}
+
+                  {/* Icon */}
+                  <div
+                    className={`p-1.5 sm:p-2 rounded-xl transition-all duration-300 ${
+                      isSelected
+                        ? 'bg-[#D91E2A] text-white shadow-md scale-110'
+                        : 'bg-slate-300/70 text-slate-600'
+                    }`}
+                  >
+                    {catKey === 'inss' && <Landmark className="w-3.5 h-3.5 sm:w-5 sm:h-5" />}
+                    {catKey === 'siape' && <Building2 className="w-3.5 h-3.5 sm:w-5 sm:h-5" />}
+                    {catKey === 'cartao' && <CreditCard className="w-3.5 h-3.5 sm:w-5 sm:h-5" />}
                   </div>
+
+                  {/* Title & Subtitle */}
+                  <div className="my-0.5 sm:my-1 w-full">
+                    <span className={`block text-[11px] sm:text-xs font-black tracking-tight font-['Outfit'] truncate ${isSelected ? 'text-[#D91E2A]' : 'text-slate-800'}`}>
+                      {info.title}
+                    </span>
+                    <span className="block text-[8px] sm:text-[9.5px] text-slate-500 font-medium truncate leading-tight">
+                      {info.subtitle}
+                    </span>
+                  </div>
+
+                  {/* Rate Badge */}
+                  <span
+                    className={`text-[8px] sm:text-[9.5px] font-black px-1.5 py-0.5 rounded-md truncate w-full transition-colors ${
+                      isSelected
+                        ? 'bg-red-50 text-[#D91E2A] border border-red-200'
+                        : 'bg-slate-300/50 text-slate-700'
+                    }`}
+                  >
+                    {info.rate}
+                  </span>
                 </button>
               );
             })}
           </div>
         </div>
 
-        {/* Interactive Simulator Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
-          
-          {/* Left / Main Controls Card (Clean Light Slate) */}
-          <div className="lg:col-span-7 bg-slate-50 border border-slate-200 rounded-3xl p-5 sm:p-7 space-y-6 shadow-sm text-slate-900">
+        {/* Interactive Simulator Container physically welded with Crown Tabs above */}
+        <div className="max-w-4xl mx-auto relative z-10 -mt-1 sm:-mt-1">
+          <div className="bg-slate-50 border-2 border-slate-200 rounded-3xl p-4 sm:p-6 lg:p-7 shadow-xl">
+            
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={selectedCategory}
+                initial={{ opacity: 0, y: 14, scale: 0.98 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                exit={{ opacity: 0, y: -10, scale: 0.98 }}
+                transition={{ duration: 0.28, ease: 'easeOut' }}
+                className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start"
+              >
+              
+              {/* Left / Main Controls Card (Clean Light Slate) */}
+              <div className="lg:col-span-7 space-y-5 text-slate-900">
             
             {/* Category summary header */}
             <div className="flex items-center justify-between gap-3 pb-4 border-b border-slate-200">
@@ -403,6 +463,9 @@ export const Simulator: React.FC<SimulatorProps> = ({ selectedCategory, onSelect
 
           </div>
 
+              </motion.div>
+            </AnimatePresence>
+          </div>
         </div>
 
       </div>
