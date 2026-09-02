@@ -118,9 +118,11 @@ export const Simulator: React.FC<SimulatorProps> = ({ selectedCategory, onSelect
           </div>
         </div>
 
-        {/* Integrated Crown-Style Category Selector (Physically fused with the simulator card below) */}
-        <div className="max-w-4xl mx-auto px-2 sm:px-4 relative z-20">
-          <div className="grid grid-cols-3 gap-1.5 sm:gap-3 max-w-2xl mx-auto relative">
+        {/* Interactive Simulator Container with index tabs emerging from behind */}
+        <div className="max-w-4xl mx-auto relative">
+          
+          {/* Index Tab Cards emerging from behind the main simulator block */}
+          <div className="grid grid-cols-3 gap-1.5 sm:gap-3 max-w-xl mx-auto px-3 relative z-0">
             {(Object.keys(LOAN_CATEGORIES) as LoanCategory[]).map((catKey) => {
               const item = LOAN_CATEGORIES[catKey];
               const isSelected = selectedCategory === catKey;
@@ -137,21 +139,16 @@ export const Simulator: React.FC<SimulatorProps> = ({ selectedCategory, onSelect
                   key={catKey}
                   type="button"
                   onClick={() => handleCategoryChange(catKey)}
-                  className={`relative flex flex-col items-center justify-between p-2 sm:p-3 rounded-t-2xl sm:rounded-t-3xl transition-all duration-300 cursor-pointer text-center select-none ${
+                  className={`relative flex flex-col items-center justify-between pt-2 pb-5 px-2 sm:px-3 rounded-t-2xl sm:rounded-t-3xl transition-all duration-300 cursor-pointer text-center select-none ${
                     isSelected
-                      ? '-translate-y-2 sm:-translate-y-3 z-30 bg-slate-50 border-t-2 border-x-2 border-b-0 border-[#D91E2A] text-slate-900 shadow-2xl shadow-red-500/20'
-                      : 'translate-y-0 opacity-75 hover:opacity-100 bg-slate-200/90 border-t border-x border-b-0 border-slate-300 text-slate-600 hover:bg-slate-200 shadow-xs'
+                      ? '-translate-y-3 sm:-translate-y-4 scale-[1.02] bg-white border-t-2 border-x-2 border-b-0 border-[#D91E2A] text-slate-900 shadow-md'
+                      : 'translate-y-1 sm:translate-y-1.5 bg-slate-200/90 hover:bg-slate-200 hover:translate-y-0 border-t border-x border-b-0 border-slate-300 text-slate-600 hover:text-slate-900 opacity-75 hover:opacity-100'
                   }`}
                   id={`tab-category-${catKey}`}
                 >
-                  {/* Bottom connector patch to physically weld active card to the main box below */}
+                  {/* Selected Indicator Tag */}
                   {isSelected && (
-                    <div className="absolute -bottom-3 left-0 right-0 h-4 bg-slate-50 z-30" />
-                  )}
-
-                  {/* Active Indicator Top Tag with card pop effect */}
-                  {isSelected && (
-                    <span className="absolute -top-3 bg-[#D91E2A] text-white text-[7.5px] sm:text-[8.5px] font-black uppercase px-2.5 py-0.5 rounded-full shadow-md tracking-wider animate-bounce">
+                    <span className="absolute -top-2.5 bg-[#D91E2A] text-white text-[7px] sm:text-[8px] font-black uppercase px-2 py-0.5 rounded-full shadow-xs tracking-wider">
                       Selecionado
                     </span>
                   )}
@@ -160,17 +157,17 @@ export const Simulator: React.FC<SimulatorProps> = ({ selectedCategory, onSelect
                   <div
                     className={`p-1.5 sm:p-2 rounded-xl transition-all duration-300 ${
                       isSelected
-                        ? 'bg-[#D91E2A] text-white shadow-md scale-110'
-                        : 'bg-slate-300/70 text-slate-600'
+                        ? 'bg-[#D91E2A] text-white shadow-xs'
+                        : 'bg-slate-300/80 text-slate-600'
                     }`}
                   >
-                    {catKey === 'inss' && <Landmark className="w-3.5 h-3.5 sm:w-5 sm:h-5" />}
-                    {catKey === 'siape' && <Building2 className="w-3.5 h-3.5 sm:w-5 sm:h-5" />}
-                    {catKey === 'cartao' && <CreditCard className="w-3.5 h-3.5 sm:w-5 sm:h-5" />}
+                    {catKey === 'inss' && <Landmark className="w-3.5 h-3.5 sm:w-4 sm:h-4" />}
+                    {catKey === 'siape' && <Building2 className="w-3.5 h-3.5 sm:w-4 sm:h-4" />}
+                    {catKey === 'cartao' && <CreditCard className="w-3.5 h-3.5 sm:w-4 sm:h-4" />}
                   </div>
 
                   {/* Title & Subtitle */}
-                  <div className="my-0.5 sm:my-1 w-full">
+                  <div className="my-0.5 w-full">
                     <span className={`block text-[11px] sm:text-xs font-black tracking-tight font-['Outfit'] truncate ${isSelected ? 'text-[#D91E2A]' : 'text-slate-800'}`}>
                       {info.title}
                     </span>
@@ -184,7 +181,7 @@ export const Simulator: React.FC<SimulatorProps> = ({ selectedCategory, onSelect
                     className={`text-[8px] sm:text-[9.5px] font-black px-1.5 py-0.5 rounded-md truncate w-full transition-colors ${
                       isSelected
                         ? 'bg-red-50 text-[#D91E2A] border border-red-200'
-                        : 'bg-slate-300/50 text-slate-700'
+                        : 'bg-slate-300/60 text-slate-700'
                     }`}
                   >
                     {info.rate}
@@ -193,19 +190,17 @@ export const Simulator: React.FC<SimulatorProps> = ({ selectedCategory, onSelect
               );
             })}
           </div>
-        </div>
 
-        {/* Interactive Simulator Container physically welded with Crown Tabs above */}
-        <div className="max-w-4xl mx-auto relative z-10 -mt-1 sm:-mt-1">
-          <div className="bg-slate-50 border-2 border-slate-200 rounded-3xl p-4 sm:p-6 lg:p-7 shadow-xl">
+          {/* Main Simulator Card Body sitting in front (z-10) */}
+          <div className="bg-slate-50 border-2 border-slate-200 rounded-3xl p-4 sm:p-6 lg:p-7 shadow-xl -mt-4 relative z-10">
             
             <AnimatePresence mode="wait">
               <motion.div
                 key={selectedCategory}
-                initial={{ opacity: 0, y: 14, scale: 0.98 }}
+                initial={{ opacity: 0, y: 12, scale: 0.99 }}
                 animate={{ opacity: 1, y: 0, scale: 1 }}
-                exit={{ opacity: 0, y: -10, scale: 0.98 }}
-                transition={{ duration: 0.28, ease: 'easeOut' }}
+                exit={{ opacity: 0, y: -8, scale: 0.99 }}
+                transition={{ duration: 0.25, ease: 'easeOut' }}
                 className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start"
               >
               
