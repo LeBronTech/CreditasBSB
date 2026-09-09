@@ -1,0 +1,19 @@
+<svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Top-Left Quadrant: Medium Slate/Gray Solid Polygon -->
+  <path d="M 0 29.3 L 29.3 0 L 47 0 L 47 28.5 L 28.5 47 L 0 47 Z" fill="#6B7280" />
+
+  <!-- Bottom-Left Quadrant: Dark Charcoal Solid Polygon -->
+  <path d="M 0 53 L 28.5 53 L 47 71.5 L 47 100 L 29.3 100 L 0 70.7 Z" fill="#27272A" />
+
+  <!-- Top-Right Quadrant: Outer Red Angular Stripe -->
+  <path d="M 53 0 L 70.7 0 L 100 29.3 L 100 47 L 86.5 47 L 86.5 35 L 65 13.5 L 53 13.5 Z" fill="#D91E2A" />
+
+  <!-- Top-Right Quadrant: Inner Red Angular Stripe -->
+  <path d="M 53 22 L 61 22 L 78 39 L 78 47 L 66 47 L 66 44 L 53 31 Z" fill="#D91E2A" />
+
+  <!-- Bottom-Right Quadrant: Outer Red Angular Stripe -->
+  <path d="M 100 53 L 100 70.7 L 70.7 100 L 53 100 L 53 86.5 L 65 86.5 L 86.5 65 L 86.5 53 Z" fill="#D91E2A" />
+
+  <!-- Bottom-Right Quadrant: Inner Red Angular Stripe -->
+  <path d="M 78 53 L 78 61 L 61 78 L 53 78 L 53 66 L 66 66 L 66 53 Z" fill="#D91E2A" />
+</svg>
