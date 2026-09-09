@@ -191,7 +191,7 @@ export const Hero: React.FC<HeroProps> = ({
               id="hero-cta-whatsapp"
             >
               <WhatsAppIcon className="w-4 h-4 text-white" />
-              <span>Chamar no WhatsApp</span>
+              <span>WhatsApp</span>
             </a>
           </div>
 
