@@ -98,7 +98,7 @@ export const Simulator: React.FC<SimulatorProps> = ({ selectedCategory, onSelect
   };
 
   return (
-    <section id="simulador" className="py-14 lg:py-20 relative scroll-mt-20 bg-white border-y border-slate-200 shadow-xs">
+    <section id="simulador" className="py-14 lg:py-20 relative scroll-mt-20 bg-white/95 backdrop-blur-xs border-y border-slate-200 shadow-xs">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         
         {/* Section Header - Objective & Direct in Clean Light Block */}
@@ -192,7 +192,7 @@ export const Simulator: React.FC<SimulatorProps> = ({ selectedCategory, onSelect
           </div>
 
           {/* Main Simulator Card Body sitting in front (z-10) */}
-          <div className="bg-slate-50 border-2 border-slate-200 rounded-3xl p-4 sm:p-6 lg:p-7 shadow-xl -mt-4 relative z-10">
+          <div className="bg-white/95 backdrop-blur-md border-2 border-slate-200 rounded-3xl p-4 sm:p-6 lg:p-7 shadow-xl -mt-4 relative z-10">
             
             <AnimatePresence mode="wait">
               <motion.div

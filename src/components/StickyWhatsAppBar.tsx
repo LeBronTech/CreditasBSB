@@ -44,16 +44,16 @@ export const StickyWhatsAppBar: React.FC = () => {
   )}`;
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 z-40 bg-[#0D0E12]/95 backdrop-blur-md border-t border-[#222634] py-2 px-3 sm:px-4 shadow-2xl">
+    <div className="fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-md border-t border-slate-200/90 py-2 px-3 sm:px-4 shadow-[0_-4px_20px_rgba(0,0,0,0.08)]">
       <div className="flex items-center gap-2 sm:gap-3 max-w-4xl mx-auto justify-between">
         
         {/* Dynamic Activity Feed / Rates */}
         <div className="flex items-center gap-2 min-w-0 flex-1">
-          <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse flex-shrink-0" />
+          <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse flex-shrink-0" />
           <div className="overflow-hidden relative h-5 flex items-center min-w-0">
             <p
               key={feedIndex}
-              className="text-[11px] sm:text-xs font-semibold text-gray-200 truncate transition-all duration-500 animate-fade-in"
+              className="text-[11px] sm:text-xs font-bold text-slate-800 truncate transition-all duration-500 animate-fade-in"
             >
               {SIMULATION_FEED[feedIndex]}
             </p>

@@ -110,7 +110,7 @@ export const Hero: React.FC<HeroProps> = ({
       {/* Main Solid Minimalist Central Card */}
       <div className="relative z-10 w-full max-w-4xl mx-auto">
         
-        <div className="relative rounded-3xl p-6 sm:p-10 md:p-12 overflow-hidden bg-slate-50 border border-slate-200 shadow-md text-center text-slate-900">
+        <div className="relative rounded-3xl p-6 sm:p-10 md:p-12 overflow-hidden bg-white/95 backdrop-blur-md border border-slate-200 shadow-md text-center text-slate-900">
           
           {/* Subtle slow motion watermark logos in corners */}
           <div
