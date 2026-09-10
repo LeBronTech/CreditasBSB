@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { FAQ_ITEMS, WHATSAPP_NUMBER } from '../data';
 import { WhatsAppIcon } from './WhatsAppIcon';
 import { HelpCircle, ChevronDown, ChevronUp, Search } from 'lucide-react';
@@ -6,10 +6,47 @@ import { HelpCircle, ChevronDown, ChevronUp, Search } from 'lucide-react';
 export const FAQ: React.FC = () => {
   const [openIndex, setOpenIndex] = useState<number | null>(0);
   const [searchTerm, setSearchTerm] = useState<string>('');
+  const [isAutoCycling, setIsAutoCycling] = useState<boolean>(true);
+  const sectionRef = useRef<HTMLElement>(null);
+  const isVisibleRef = useRef<boolean>(false);
 
   const toggleAccordion = (index: number) => {
+    // Desativa a animação automática permanentemente quando o usuário clica manualmente
+    setIsAutoCycling(false);
     setOpenIndex(openIndex === index ? null : index);
   };
+
+  // Observa se a seção de FAQ (ou depoimentos/área inferior) está visível na tela
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        isVisibleRef.current = entry.isIntersecting;
+      },
+      { threshold: 0.15 }
+    );
+
+    if (sectionRef.current) {
+      observer.observe(sectionRef.current);
+    }
+
+    return () => observer.disconnect();
+  }, []);
+
+  // Intervalo de 6s para alternar automaticamente as perguntas
+  useEffect(() => {
+    if (!isAutoCycling || searchTerm.trim() !== '') return;
+
+    const interval = setInterval(() => {
+      if (!isVisibleRef.current) return;
+
+      setOpenIndex((prev) => {
+        const next = prev === null ? 0 : (prev + 1) % FAQ_ITEMS.length;
+        return next;
+      });
+    }, 6000);
+
+    return () => clearInterval(interval);
+  }, [isAutoCycling, searchTerm]);
 
   const filteredFaqs = FAQ_ITEMS.filter(
     (item) =>
@@ -22,7 +59,7 @@ export const FAQ: React.FC = () => {
   )}`;
 
   return (
-    <section id="duvidas" className="py-14 lg:py-20 relative scroll-mt-20 bg-slate-50 border-t border-slate-200">
+    <section ref={sectionRef} id="duvidas" className="py-14 lg:py-20 relative scroll-mt-20 bg-slate-50 border-t border-slate-200">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         
         {/* Header */}
@@ -58,7 +95,7 @@ export const FAQ: React.FC = () => {
               return (
                 <div
                   key={index}
-                  className={`rounded-2xl border transition-all duration-200 overflow-hidden ${
+                  className={`rounded-2xl border transition-all duration-300 overflow-hidden ${
                     isOpen
                       ? 'bg-white border-[#D91E2A] shadow-md ring-1 ring-[#D91E2A]'
                       : 'bg-white border-slate-200 hover:border-slate-300 shadow-xs'
@@ -69,16 +106,22 @@ export const FAQ: React.FC = () => {
                     className="w-full p-4 text-left flex items-center justify-between gap-4 font-bold text-xs sm:text-sm text-slate-900 focus:outline-hidden cursor-pointer"
                   >
                     <span className="font-['Outfit']">{faq.question}</span>
-                    <span className="p-1 rounded-lg bg-slate-100 text-slate-700 flex-shrink-0 border border-slate-200">
-                      {isOpen ? <ChevronUp className="w-3.5 h-3.5 text-[#D91E2A]" /> : <ChevronDown className="w-3.5 h-3.5" />}
+                    <span className={`p-1 rounded-lg transition-colors duration-200 flex-shrink-0 border ${isOpen ? 'bg-red-50 text-[#D91E2A] border-red-200' : 'bg-slate-100 text-slate-700 border-slate-200'}`}>
+                      <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-300 ease-in-out ${isOpen ? 'rotate-180 text-[#D91E2A]' : 'text-slate-600'}`} />
                     </span>
                   </button>
 
-                  {isOpen && (
-                    <div className="px-4 pb-4 text-xs text-slate-600 leading-relaxed border-t border-slate-100 pt-3">
-                      {faq.answer}
+                  <div
+                    className={`grid transition-all duration-300 ease-in-out ${
+                      isOpen ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'
+                    }`}
+                  >
+                    <div className="overflow-hidden">
+                      <div className="px-4 pb-4 text-xs text-slate-600 leading-relaxed border-t border-slate-100 pt-3">
+                        {faq.answer}
+                      </div>
                     </div>
-                  )}
+                  </div>
                 </div>
               );
             })
